@@ -1,0 +1,1 @@
+const Farmer = require('../models/farmer.model');
