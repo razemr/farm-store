@@ -4,13 +4,16 @@ const Schema = mongoose.Schema;
 const ProgramSchema = new mongoose.Schema({
     farmer: {
         type: Schema.Types.ObjectId,
-        ref: 'Farmer'
+        ref: 'Farmer',
+        required: true
     },
     startDate: {
-        type: Date
+        type: Date,
+        required: true
     },
     endDate: {
-        type: Date
+        type: Date,
+        required: true
     },
     completed: {
         type: Boolean,
@@ -26,15 +29,16 @@ const ProgramSchema = new mongoose.Schema({
     },
     crop: {
         type: Schema.Types.ObjectId,
-        ref: 'Crop'
+        ref: 'Crop',
+        required: true
     },
     milestones: [{
         notifiedFarmer: {
             type: Boolean,
             default: false
         },
-        daysFromStart: {
-            type: Number,
+        date: {
+            type: Date,
             required: true
         },
         notificationStatus: {
@@ -42,14 +46,16 @@ const ProgramSchema = new mongoose.Schema({
             enum: {
                 values: ['Not Due', 'Active', 'Overdue']
             },
-            default: 'Not Due'
+            default: 'Not Due',
+            required: true
         },
         productApplications: [{
             product: {
                 type: Schema.Types.ObjectId,
-                ref: 'Product'
+                ref: 'Product',
+                required: true
             },
-            perAcre: {
+            quantity: {
                 type: Number,
                 required: true
             },
@@ -57,7 +63,8 @@ const ProgramSchema = new mongoose.Schema({
                 type: String,
                 enum: {
                     values: ['lb', 'kg', 'l', 'gal', 'pack']
-                }
+                },
+                required: true
             }
         }]
     }]

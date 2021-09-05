@@ -1,1 +1,0 @@
-const ProgramTemplate = require('../models/program-template.model');

@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const regex = require('../utils/regex');
 
 const FarmerSchema = new mongoose.Schema({
     firstName: {
-        type: string,
+        type: String,
         trim: true,
         required: true
     },
     lastName: {
-        type: string,
+        type: String,
         trim: true,
         required: true
     },
@@ -22,6 +23,7 @@ const FarmerSchema = new mongoose.Schema({
     }],
     emailAddress: {
         type: String,
+        unique: true,
         validate: {
             validator: (v) => {
                 return regex.emailRegex.test(v)
@@ -37,17 +39,15 @@ const FarmerSchema = new mongoose.Schema({
         ref: 'RadaExtension'
     },
     address: {
-        type: string
+        type: String
     },
     farmGps: {
         type: {
             type: String,
-            enum: ['Point'],
-            required: true
+            enum: ['Point']
         },
         coordinates: {
-            type: [Number],
-            required: true
+            type: [Number]
         }
     },
     crops: [{
