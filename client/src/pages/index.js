@@ -1,4 +1,5 @@
 import Dashboard from "./dashboard/Dashboard";
-import ProgramList from "./program-list/ProgramList";
+import ListProgram from "./list-program/ListProgram";
+import CreateProgram from "./create-program/CreateProgram";
 
-export { Dashboard, ProgramList };
+export { Dashboard, ListProgram, CreateProgram };

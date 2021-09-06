@@ -15,6 +15,9 @@ const ProgramSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
+    nextMilestone: {
+        type: Date
+    },
     completed: {
         type: Boolean,
         default: false
@@ -32,6 +35,9 @@ const ProgramSchema = new mongoose.Schema({
         ref: 'Crop',
         required: true
     },
+    acres: {
+        type: Number
+    },
     milestones: [{
         notifiedFarmer: {
             type: Boolean,
@@ -39,14 +45,6 @@ const ProgramSchema = new mongoose.Schema({
         },
         date: {
             type: Date,
-            required: true
-        },
-        notificationStatus: {
-            type: String,
-            enum: {
-                values: ['Not Due', 'Active', 'Overdue']
-            },
-            default: 'Not Due',
             required: true
         },
         productApplications: [{

@@ -1,5 +1,5 @@
 import React from "react";
-import FullCalendar from "@fullcalendar/react"; // must go before plugins
+import FullCalendar, { formatDate } from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import { Card, CardContent, CardHeader, makeStyles } from "@material-ui/core";
 
@@ -21,8 +21,24 @@ export default function CalendarWidget() {
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
           headerToolbar={{ start: "title", center: "", end: "prev,next" }}
+          eventContent = {renderEventContent}
+          events={[
+            {
+              title: "20-20-20\n15-5-35\nDiuron",
+              date: new Date(),
+            },
+          ]}
         />
       </CardContent>
     </Card>
   );
+}
+
+function renderEventContent(eventInfo) {
+  return (
+    <>
+      {/* <b>{eventInfo.timeText}</b> */}
+      <i>{eventInfo.event.title}</i>
+    </>
+  )
 }

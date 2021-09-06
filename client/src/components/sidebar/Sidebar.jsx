@@ -1,9 +1,6 @@
 import {
   Drawer,
   List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   ListSubheader,
   makeStyles,
   Toolbar,
@@ -14,7 +11,9 @@ import {
   PeopleAlt,
   Storefront,
   Timeline,
+  Star
 } from "@material-ui/icons";
+import { ListItemLink } from "../index";
 
 const drawerWidth = 240;
 
@@ -46,37 +45,13 @@ export default function Sidebar() {
       <div className={classes.drawerContainer}>
         <List component="nav">
           <ListSubheader component="div">Main</ListSubheader>
-          <ListItem button selected={true}>
-            <ListItemIcon>
-              <Dashboard />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Timeline />
-            </ListItemIcon>
-            <ListItemText primary="Programs" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <PeopleAlt />
-            </ListItemIcon>
-            <ListItemText primary="Farmers" />
-          </ListItem>
+          <ListItemLink to="/" primary="Dashboard" icon={<Dashboard />}/>
+          <ListItemLink to="/programs" primary="Programs" icon={<Timeline />}/>
+          <ListItemLink to="/" primary="Milestones" icon={<Star />}/>
           <ListSubheader component="div">Database</ListSubheader>
-          <ListItem button>
-            <ListItemIcon>
-              <FileCopy />
-            </ListItemIcon>
-            <ListItemText primary="Templates" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Storefront />
-            </ListItemIcon>
-            <ListItemText primary="Products" />
-          </ListItem>
+          <ListItemLink to="/" primary="Farmers" icon={<PeopleAlt />}/>
+          <ListItemLink to="/" primary="Products" icon={<Storefront />}/>
+          <ListItemLink to="/" primary="Templates" icon={<FileCopy />}/>
         </List>
       </div>
     </Drawer>

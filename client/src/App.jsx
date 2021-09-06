@@ -1,6 +1,6 @@
 import { Topbar, Sidebar } from "./components";
-import { Dashboard, ProgramList } from "./pages";
-import { Toolbar } from "@material-ui/core";
+import { Dashboard, ListProgram, CreateProgram } from "./pages";
+import { CssBaseline, Toolbar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
@@ -16,6 +16,7 @@ function App() {
   const classes = useStyles();
   return (
     <Router>
+      <CssBaseline />
       <div className="app">
         <Topbar />
         <Sidebar />
@@ -26,7 +27,14 @@ function App() {
               <Dashboard />
             </Route>
             <Route path="/programs">
-              <ProgramList />
+              <Switch>
+                <Route path="/programs" exact>
+                  <ListProgram />
+                </Route>
+                <Route path="/programs/create">
+                  <CreateProgram/>
+                </Route>
+              </Switch>
             </Route>
           </Switch>
         </main>
