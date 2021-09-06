@@ -3,7 +3,6 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { useField, useFormikContext } from "formik";
 
 export default function DatePickerControl(props) {
   const { name, label, value, onChange, ...other } = props;

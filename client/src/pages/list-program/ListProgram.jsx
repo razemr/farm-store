@@ -6,18 +6,33 @@ import {
   Input,
   InputAdornment,
   makeStyles,
+  Container,
 } from "@material-ui/core";
 import { Delete, Edit, Visibility, Search, Add } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { ProgramDialog } from "../../components";
+import { useState } from "react";
 
 const useStyles = makeStyles({
   createButton: {
-    marginLeft: '20px'
-  }
+    marginLeft: "20px",
+  },
 });
 
 export default function ListProgram() {
   const classes = useStyles();
+  const [openDialog, setOpenDialog] = useState(true);
+  const history = useHistory();
+
+  const handleOnManual = () => {
+    setOpenDialog(false);
+    history.push("/programs/create");
+  };
+
+  const handleOnTemplate = (program) => {
+    setOpenDialog(false);
+    history.push({ pathname: "/programs/create", state: { ...program } });
+  };
 
   const columnDefaults = {
     disableColumnMenu: true,
@@ -44,6 +59,7 @@ export default function ListProgram() {
             <img
               src={`https://avatars.dicebear.com/api/initials/${params.row.farmer.firstName} ${params.row.farmer.lastName}.svg`}
               className="farmer-avatar"
+              alt="user"
             ></img>
             <span>
               {params.row.farmer.firstName} {params.row.farmer.lastName}
@@ -63,6 +79,7 @@ export default function ListProgram() {
             <img
               src={`${process.env.PUBLIC_URL}/images/${params.row.crop}.jpg`}
               className="crop-image"
+              alt={params.row.crop}
             ></img>
             <span>{params.row.crop}</span>
           </div>
@@ -80,20 +97,17 @@ export default function ListProgram() {
         const mDif = date - today;
         const dDif = Math.floor(mDif / (1000 * 60 * 60 * 24));
 
-        let status = "Not Due";
         let style = {
           backgroundColor: "#ebf1fe",
           color: "#2a7ade",
         };
 
         if (dDif < 0) {
-          status = "Overdue";
           style = {
             backgroundColor: "#fff0f1",
             color: "#d95087",
           };
         } else if (dDif >= 0 && dDif < 8) {
-          status = "Due";
           style = {
             backgroundColor: "#e5faf2",
             color: "#3bb077",
@@ -192,32 +206,30 @@ export default function ListProgram() {
   ];
 
   return (
-    <div>
-      <div class="header">
-        <h2>Programs</h2>
-
+    <Container>
+      <div className="header">
+        <h1>Programs</h1>
         <div className="header-actions">
           <Input
             placeholder="Searh programs"
-            startAdornment={<InputAdornment>
-              <Search/>
-            </InputAdornment>}
-
+            startAdornment={
+              <InputAdornment position="start">
+                <Search />
+              </InputAdornment>
+            }
           />
           <IconButton
-            component={Link}
-            to="/programs/create"
+            onClick={() => setOpenDialog(true)}
             className={classes.createButton}
           >
             <Add />
           </IconButton>
           <IconButton color="secondary" disabled>
-              <Delete />
-            </IconButton>
+            <Delete />
+          </IconButton>
         </div>
       </div>
-
-      <div class="grid-container">
+      <div className="grid-container">
         <div style={{ flexGrow: 1 }}>
           <DataGrid
             rows={rows}
@@ -229,6 +241,12 @@ export default function ListProgram() {
           />
         </div>
       </div>
-    </div>
+      <ProgramDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onManual={handleOnManual}
+        onTemplate={handleOnTemplate}
+      />
+    </Container>
   );
 }

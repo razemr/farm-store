@@ -1,9 +1,10 @@
 import "./Dashboard.css";
 import { FeaturedCard, MilestoneWidget, CalendarWidget } from "../../components";
+import { Container } from "@material-ui/core";
 
 export default function Dashboard() {
   return (
-    <>
+    <Container>
       <div className="featured">
         <FeaturedCard title="Programs" count="10" color="#4caf50" />
         <FeaturedCard title="Milestones" count="5" color="#2196f3" />
@@ -13,6 +14,6 @@ export default function Dashboard() {
         <CalendarWidget/>
         <MilestoneWidget></MilestoneWidget>
       </div>
-    </>
+    </Container>
   );
 }

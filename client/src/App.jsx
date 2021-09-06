@@ -23,17 +23,11 @@ function App() {
         <main className={classes.content}>
           <Toolbar />
           <Switch>
-            <Route path="/" exact>
-              <Dashboard />
-            </Route>
+            <Route path="/" exact component={Dashboard}/>
             <Route path="/programs">
               <Switch>
-                <Route path="/programs" exact>
-                  <ListProgram />
-                </Route>
-                <Route path="/programs/create">
-                  <CreateProgram/>
-                </Route>
+                <Route path="/programs" exact component={ListProgram}/>
+                <Route path="/programs/create" component={CreateProgram}/>
               </Switch>
             </Route>
           </Switch>

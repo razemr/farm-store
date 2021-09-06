@@ -24,7 +24,7 @@ const ProgramTemplateSchema = new mongoose.Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'Product'
             },
-            perAcreQuantity: {
+            quantity: {
                 type: Number,
                 required: true
             },

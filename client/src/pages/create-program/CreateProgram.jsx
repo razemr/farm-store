@@ -1,21 +1,29 @@
-import { Card, CardContent, Grid, Paper } from "@material-ui/core";
-import { useState } from "react";
-import { ProgramForm, TemplateSelection } from "../../components";
+import { Container } from "@material-ui/core";
+import { ProgramForm } from "../../components";
 
-export default function CreateProgram() {
-  const [openCreate, setOpenCreate] = useState(false);
-  const handleCreateOpen = () => {
-    setOpenCreate(true);
+export default function CreateProgram(props) {
+  const program = props.location.state || {
+    name: "",
+    farmer: "",
+    startDate: null,
+    endDate: null,
+    acres: "",
+    crop: "",
+    milestones: [{
+      date: null,
+      productApplications: [{
+        product: "",
+        quantity: "",
+        unit: ""
+      }]
+    }],
   };
-
-  const handleCreateClose = () => {};
   return (
-    <>
-      <TemplateSelection open={openCreate} onClose={handleCreateClose} />
+    <Container>
       <div className="header">
-        <h2>Create Program</h2>
+        <h1>Create Program</h1>
       </div>
-      <ProgramForm/>
-    </>
+      <ProgramForm program={program}/>
+    </Container>
   );
 }
