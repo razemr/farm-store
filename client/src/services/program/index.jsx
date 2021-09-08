@@ -1,10 +1,16 @@
 export const loadMilestonesFromTemplate = (templates, startDate, acres) => {
-  let milestones = templates.map((template) => {
 
+  let endDate = startDate;
+
+  let milestones = templates.map((template) => {
     const date = new Date(startDate.getTime() + (template.daysFromStart * 24 * 60 * 60 * 1000));
 
+    if(date.getTime() > endDate.getTime()) {
+      endDate = date;
+    }
+
     const productApplications = template.productApplications.map((pa) => {
-      const quantity = Math.floor(acres * pa.quantity);
+      const quantity = Math.ceil(acres * pa.quantity);
 
       return {
         product: pa.product,
@@ -19,5 +25,5 @@ export const loadMilestonesFromTemplate = (templates, startDate, acres) => {
     };
   });
 
-  return milestones;
+  return {milestones, endDate};
 };

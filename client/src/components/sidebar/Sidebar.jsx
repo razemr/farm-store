@@ -17,7 +17,7 @@ import { ListItemLink } from "../index";
 
 const drawerWidth = 240;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -27,8 +27,9 @@ const useStyles = makeStyles({
   },
   drawerContainer: {
     overflow: "auto",
+    marginTop: theme.spacing(10)
   },
-});
+}));
 
 export default function Sidebar() {
   const classes = useStyles();
@@ -41,14 +42,13 @@ export default function Sidebar() {
         paper: classes.drawerPaper,
       }}
     >
-      <Toolbar />
       <div className={classes.drawerContainer}>
         <List component="nav">
-          <ListSubheader component="div">Main</ListSubheader>
+          {/* <ListSubheader component="div">Main</ListSubheader> */}
           <ListItemLink to="/" primary="Dashboard" icon={<Dashboard />}/>
           <ListItemLink to="/programs" primary="Programs" icon={<Timeline />}/>
           <ListItemLink to="/" primary="Milestones" icon={<Star />}/>
-          <ListSubheader component="div">Database</ListSubheader>
+          {/* <ListSubheader component="div">Database</ListSubheader> */}
           <ListItemLink to="/" primary="Farmers" icon={<PeopleAlt />}/>
           <ListItemLink to="/" primary="Products" icon={<Storefront />}/>
           <ListItemLink to="/" primary="Templates" icon={<FileCopy />}/>

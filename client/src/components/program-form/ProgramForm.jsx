@@ -1,3 +1,5 @@
+import { useContext, useEffect } from "react";
+import {GlobalContext} from "../../context/GlobalState";
 import {
   Paper,
   Grid,
@@ -35,8 +37,14 @@ const useStyles = makeStyles({
 });
 
 export default function ProgramForm(props) {
-  const { program } = props;
+  const { program, onSubmit } = props;
+  const { listItems, postItem, farmers, crops} = useContext(GlobalContext);
   const classes = useStyles();
+
+  useEffect(()=> {
+    listItems(["farmers", "crops", "products", "units"])
+  }, []);
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Program name is required"),
     farmer: Yup.string().required("Farmer is required"),
@@ -60,48 +68,22 @@ export default function ProgramForm(props) {
         productApplications: Yup.array().of(
           Yup.object().shape({
             product: Yup.string().required("Product is required"),
-            quantity: Yup.number().moreThan(0).required("Quantity is required"),
+            quantity: Yup.number().moreThan(0, "Quantity must be grater than zero").required("Quantity is required"),
             unit: Yup.string().required("Unit is required"),
           })
         ),
       })
     ),
   });
-  const farmers = [
-    {
-      key: "1",
-      label: "Ramone Graham",
-      value: "1",
-    },
-    {
-      key: "2",
-      label: "Sheree Bryan",
-      value: "2",
-    },
-  ];
-  const crops = [
-    {
-      key: "1",
-      label: "Pineapple",
-      value: "1",
-    },
-    {
-      key: "2",
-      label: "Dasheen",
-      value: "2",
-    },
-    {
-      key: "3",
-      label: "Carrot",
-      value: "3",
-    },
-  ];
 
   return (
     <Formik
       initialValues={program}
       validationSchema={validationSchema}
-      onSubmit={(value) => {}}
+      onSubmit={(values) => {
+        postItem("programs", values);
+        onSubmit();
+      }}
     >
       {({
         values,
@@ -130,7 +112,11 @@ export default function ProgramForm(props) {
                   value={values.crop}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  options={crops}
+                  options={crops ? crops.map(({_id, name}) => ({
+                    key: _id,
+                    value: _id,
+                    label: name
+                  })): []}
                   error={touched.crop && Boolean(errors.crop)}
                   helperText={touched.crop ? errors.crop : null}
                 ></SelectControl>
@@ -151,7 +137,11 @@ export default function ProgramForm(props) {
                   value={values.farmer}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  options={farmers}
+                  options={farmers ? farmers.map(({_id, firstName, lastName}) => ({
+                    key: _id,
+                    value: _id,
+                    label: `${firstName} ${lastName}`
+                  })): []}
                   error={touched.farmer && Boolean(errors.farmer)}
                   helperText={touched.farmer ? errors.farmer : null}
                 ></SelectControl>

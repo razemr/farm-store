@@ -5,10 +5,7 @@ exports.addProgramTemplate = async (req, res, next) => {
     delete req.body._id;
 
     const programTemplate = await ProgramTemplate.create(req.body);
-    return res.status(201).json({
-      success: true,
-      data: programTemplate,
-    });
+    return res.status(201).json(programTemplate);
   } catch (error) {
     if (error.name === "ValidationError") {
       res.status(400).json({
@@ -33,10 +30,7 @@ exports.getProgramTemplate = async (req, res, next) => {
         error: "No Program Template found",
       });
     } else {
-      return res.status(200).json({
-        success: true,
-        data: programTemplate,
-      });
+      return res.status(200).json(programTemplate);
     }
   } catch (error) {
     next(error);
@@ -52,10 +46,7 @@ exports.editProgramTemplate = async (req, res, next) => {
       req.body
     );
 
-    res.status(200).json({
-      success: true,
-      data: programTemplate,
-    });
+    res.status(200).json(programTemplate);
   } catch (error) {
     next(error);
   }
@@ -64,9 +55,7 @@ exports.editProgramTemplate = async (req, res, next) => {
 exports.deleteProgramTemplate = async (req, res, next) => {
   try {
     await ProgramTemplate.findByIdAndDelete(req.params.id);
-    res.status(200).json({
-      success: true,
-    });
+    res.status(200).send();
   } catch (error) {
     next(error);
   }
@@ -89,9 +78,8 @@ exports.listProgramTemplates = async (req, res, next) => {
       .sort(sort);
 
     res.status(200).json({
-      success: true,
-      total: total,
-      data: programTemplates,
+      total,
+      programTemplates,
     });
   } catch (error) {
     next(error);

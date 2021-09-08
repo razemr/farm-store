@@ -1,42 +1,42 @@
 import { Topbar, Sidebar } from "./components";
-import { Dashboard, ListProgram, CreateProgram } from "./pages";
-import { CssBaseline, Toolbar } from "@material-ui/core";
+import { Dashboard, ListProgram, CreateProgram, ViewProgram } from "./pages";
+import { CssBaseline, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
+import { GlobalProvider } from "./context/GlobalState";
 
 const useStyles = makeStyles((theme) => ({
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
+  root: {
+    marginTop: theme.spacing(10)
   },
 }));
 
 function App() {
   const classes = useStyles();
   return (
-    <Router>
-      <CssBaseline />
-      <div className="app">
-        <Topbar />
-        <Sidebar />
-        <main className={classes.content}>
-          <Toolbar />
-          <Switch>
-            <Route path="/" exact component={Dashboard}/>
-            <Route path="/programs">
-              <Switch>
-                <Route path="/programs" exact component={ListProgram}/>
-                <Route path="/programs/create" component={CreateProgram}/>
-              </Switch>
-            </Route>
-          </Switch>
-        </main>
-      </div>
-    </Router>
+    <GlobalProvider>
+      <Router>
+        <CssBaseline />
+        <div className="app">
+          <Topbar />
+          <Sidebar />
+          <Container component="main" className={classes.root}>
+            <Switch>
+              <Route path="/" exact component={Dashboard} />
+              <Route path="/programs">
+                <Switch>
+                  <Route path="/programs" exact component={ListProgram} />
+                  <Route path="/programs/create" exact component={CreateProgram} />
+                  <Route path="/programs/:id" component={ViewProgram} />
+                </Switch>
+              </Route>
+            </Switch>
+          </Container>
+        </div>
+      </Router>
+    </GlobalProvider>
   );
 }
 
 export default App;
-
-//Container - look into this

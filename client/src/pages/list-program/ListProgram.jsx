@@ -11,7 +11,8 @@ import {
 import { Delete, Edit, Visibility, Search, Add } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { ProgramDialog } from "../../components";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { GlobalContext } from "../../context/GlobalState";
 
 const useStyles = makeStyles({
   createButton: {
@@ -21,8 +22,13 @@ const useStyles = makeStyles({
 
 export default function ListProgram() {
   const classes = useStyles();
-  const [openDialog, setOpenDialog] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
   const history = useHistory();
+  const { listItems, programs } = useContext(GlobalContext);
+
+  useEffect(() => {
+    listItems("programs");
+  }, []);
 
   const handleOnManual = () => {
     setOpenDialog(false);
@@ -77,11 +83,11 @@ export default function ListProgram() {
         return (
           <div className="crop-name">
             <img
-              src={`${process.env.PUBLIC_URL}/images/${params.row.crop}.jpg`}
+              src={`${process.env.PUBLIC_URL}/images/${params.row.crop.name}.jpg`}
               className="crop-image"
-              alt={params.row.crop}
+              alt={params.row.crop.name}
             ></img>
-            <span>{params.row.crop}</span>
+            <span>{params.row.crop.name}</span>
           </div>
         );
       },
@@ -126,7 +132,7 @@ export default function ListProgram() {
       renderCell: (params) => {
         return (
           <div>
-            <IconButton>
+            <IconButton onClick={e => history.push(`/programs/${params.row._id}`)}>
               <Visibility />
             </IconButton>
             <IconButton>
@@ -135,73 +141,6 @@ export default function ListProgram() {
           </div>
         );
       },
-    },
-  ];
-  const rows = [
-    {
-      id: 1,
-      name: "Pineapple Precise Management System",
-      farmer: {
-        firstName: "Ramone",
-        lastName: "Graham",
-      },
-      startDate: "January 6, 2021",
-      endDate: "December 6, 2021",
-      company: "Newport Fersan",
-      crop: "Pineapple",
-      nextMilestone: "September 6, 2021",
-    },
-    {
-      id: 2,
-      name: "Pineapple Precise Management System",
-      farmer: {
-        firstName: "Sheree",
-        lastName: "Bryan",
-      },
-      startDate: "January 6, 2021",
-      endDate: "December 6, 2021",
-      company: "Newport Fersan",
-      crop: "Dasheen",
-      nextMilestone: "September 10, 2021",
-    },
-    {
-      id: 3,
-      name: "Pineapple Precise Management System",
-      farmer: {
-        firstName: "Michael",
-        lastName: "Williams",
-      },
-      startDate: "January 6, 2021",
-      endDate: "December 6, 2021",
-      company: "Newport Fersan",
-      crop: "Carrot",
-      nextMilestone: "August 6, 2021",
-    },
-    {
-      id: 4,
-      name: "Pineapple Precise Management System",
-      farmer: {
-        firstName: "Ishamar",
-        lastName: "Laing",
-      },
-      startDate: "January 6, 2021",
-      endDate: "December 6, 2021",
-      company: "Newport Fersan",
-      crop: "Dasheen",
-      nextMilestone: "October 6, 2021",
-    },
-    {
-      id: 5,
-      name: "Pineapple Precise Management System",
-      farmer: {
-        firstName: "Danielle",
-        lastName: "Watson",
-      },
-      startDate: "January 6, 2021",
-      endDate: "December 6, 2021",
-      company: "Newport Fersan",
-      crop: "Pineapple",
-      nextMilestone: "November 6, 2021",
     },
   ];
 
@@ -232,7 +171,8 @@ export default function ListProgram() {
       <div className="grid-container">
         <div style={{ flexGrow: 1 }}>
           <DataGrid
-            rows={rows}
+            rows={programs}
+            getRowId={(row) => row._id}
             columns={columns}
             pageSize={50}
             checkboxSelection

@@ -1,3 +1,4 @@
+import { useState, useContext, useEffect } from "react";
 import {
   Stepper,
   Step,
@@ -6,12 +7,12 @@ import {
   Button,
   TextField,
 } from "@material-ui/core";
-import { useState } from "react";
 import { SelectControl, DatePickerControl } from "..";
 import RadioControl from "../form-controls/radio/RadioControl";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { loadMilestonesFromTemplate } from "../../services/program";
+import { GlobalContext } from "../../context/GlobalState";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,93 +50,63 @@ function getSteps() {
 }
 
 const initialValues = {
-  farmer: "",
+  template: "",
   startDate: null,
   acres: "",
-  template: "",
-};
-
-const template = {
-  id: "1",
-  crop: "1",
-  company: "1",
-  name: "Pineapple - PNMS",
-  milestones: [{
-    daysFromStart: 0,
-    productApplications: [
-      {
-        product: "1",
-        quantity: 5,
-        unit: "lb"
-      }
-    ]
-  },{
-    daysFromStart: 10,
-    productApplications: [
-      {
-        product: "1",
-        quantity: 7,
-        unit: "lb"
-      },
-      {
-        product: "2",
-        quantity: 5,
-        unit: "pack"
-      }
-    ]
-  },{
-    daysFromStart: 30,
-    productApplications: [
-      {
-        product: "3",
-        quantity: 12,
-        unit: "lb"
-      },{
-        product: "1",
-        quantity: 5,
-        unit: "lb"
-      },{
-        product: "2",
-        quantity: 59,
-        unit: "l"
-      }
-    ]
-  }],
+  farmer: "",
+  name: "",
 };
 
 export default function ProgramStepper(props) {
   const { onManual, onTemplate } = props;
+  const { listItems, farmers, programTemplates } = useContext(GlobalContext);
   const [activeStep, setActiveStep] = useState(0);
   const [inputOption, setInputOption] = useState("0");
   const classes = useStyles();
   const steps = getSteps();
-  const validationSchema = Yup.object({});
+
+  useEffect(() => {
+    listItems(["farmers", "program-templates"]);
+  }, []);
+
+  const validationSchema = Yup.object({
+    template: Yup.string().required("Template is required"),
+    startDate: Yup.date()
+      .nullable()
+      .typeError("Invalid Date")
+      .required("Start date is required"),
+    acres: Yup.number().moreThan(0).required("Number of acres is required"),
+  });
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
       const startDate = new Date(values.startDate);
       const acres = Number(values.acres);
-      const milestones = loadMilestonesFromTemplate(
+      const template = programTemplates.find(
+        (template) => template._id === values.template
+      );
+      const { milestones, endDate } = loadMilestonesFromTemplate(
         template.milestones,
         startDate,
         acres
       );
 
       onTemplate({
+        farmer: values.farmer,
+        template: values.template,
+        name: values.name || template.name,
+        crop: template.crop,
+        acres,
+        endDate,
         milestones,
         startDate,
-        crop: template.crop,
-        farmer: values.farmer,
-        company: template.company,
-        name: values.name || template.name,
-        template: template.id,
-        acres
       });
     },
   });
 
-  const handleNext = () => {
+  const handleNext = async () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -146,9 +117,13 @@ export default function ProgramStepper(props) {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep}>
-        {steps.map((label) => (
+        {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+            <StepLabel
+              error={index === 1 && Object.keys(formik.errors).length > 0}
+            >
+              {label}
+            </StepLabel>
           </Step>
         ))}
       </Stepper>
@@ -158,17 +133,11 @@ export default function ProgramStepper(props) {
             <h3>Input Option</h3>
             <RadioControl
               value={inputOption}
-              options={[
-                {
-                  label: "Template",
-                  value: "0",
-                },
-                {
-                  label: "Manual",
-                  value: "1",
-                },
-              ]}
               onChange={(e) => setInputOption(e.target.value)}
+              options={[
+                { key: "0", label: "Template", value: "0" },
+                { key: "1", label: "Manual", value: "1" },
+              ]}
             />
           </>
         ) : activeStep === 1 ? (
@@ -179,37 +148,44 @@ export default function ProgramStepper(props) {
               value={formik.values.template}
               label="Template"
               onChange={formik.handleChange}
-              options={[
-                {
-                  key: "1",
-                  label: "Pineapple - PNMS",
-                  value: "1",
-                },
-                {
-                  key: "2",
-                  label: "Dasheen - PNMS",
-                  value: "2",
-                },
-                {
-                  key: "3",
-                  label: "Carrot - PNMS",
-                  value: "3",
-                },
-              ]}
+              onBlur={formik.handleBlur}
+              error={formik.touched.template && Boolean(formik.errors.template)}
+              helperText={
+                formik.touched.template ? formik.errors.template : null
+              }
+              options={
+                programTemplates
+                  ? programTemplates.map(({ _id, name }) => ({
+                      key: _id,
+                      value: _id,
+                      label: name,
+                    }))
+                  : []
+              }
             />
             <DatePickerControl
               label="Start Date"
               name="startDate"
               value={formik.values.startDate}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.startDate && Boolean(formik.errors.startDate)
+              }
+              helperText={
+                formik.touched.startDate ? formik.errors.startDate : null
+              }
             />
             <TextField
               type="number"
               label="Acres"
               name="acres"
+              inputProps={{ step: "any", min: "0" }}
               value={formik.values.acres}
               onChange={formik.handleChange}
-              inputProps={{ step: "any", min: "0" }}
+              onBlur={formik.handleBlur}
+              error={formik.touched.acres && Boolean(formik.errors.acres)}
+              helperText={formik.touched.acres ? formik.errors.acres : null}
             />
           </>
         ) : (
@@ -220,6 +196,7 @@ export default function ProgramStepper(props) {
               name="name"
               value={formik.values.name}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
 
             <SelectControl
@@ -227,18 +204,16 @@ export default function ProgramStepper(props) {
               label="Farmer"
               value={formik.values.farmer}
               onChange={formik.handleChange}
-              options={[
-                {
-                  key: "1",
-                  label: "Ramone Graham",
-                  value: "1",
-                },
-                {
-                  key: "2",
-                  label: "Sheree Bryan",
-                  value: "2",
-                },
-              ]}
+              onBlur={formik.handleBlur}
+              options={
+                farmers
+                  ? farmers.map(({ _id, firstName, lastName }) => ({
+                      key: _id,
+                      value: _id,
+                      label: `${firstName} ${lastName}`,
+                    }))
+                  : []
+              }
             ></SelectControl>
           </>
         )}

@@ -10,6 +10,8 @@ const farmerRoutes = require("./routes/farmers.routes");
 const productRoutes = require("./routes/products.routes");
 const programTemplateRoutes = require("./routes/program-templates.routes");
 const programRoutes = require("./routes/programs.routes");
+const cropRoutes = require("./routes/crops.routes");
+const unitRoutes = require("./routes/units.routes");
 
 dotenv.config({ path: "./config/config.env" });
 
@@ -29,6 +31,8 @@ app.use("/api/farmers", farmerRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/program-templates", programTemplateRoutes);
 app.use("/api/programs", programRoutes);
+app.use("/api/crops", cropRoutes);
+app.use("/api/units", unitRoutes);
 
 //Error handling middleware
 app.use(function (err, req, res, next) {

@@ -5,10 +5,7 @@ exports.addFarmer = async (req, res, next) => {
     delete req.body._id;
 
     const farmer = await Farmer.create(req.body);
-    return res.status(201).json({
-      success: true,
-      data: farmer,
-    });
+    return res.status(201).json(farmer);
   } catch (error) {
     if (error.name === "ValidationError") {
       res.status(400).json({
@@ -31,10 +28,7 @@ exports.getFarmer = async (req, res, next) => {
         error: "No farmer found",
       });
     } else {
-      return res.status(200).json({
-        success: true,
-        data: farmer,
-      });
+      return res.status(200).json(farmer);
     }
   } catch (error) {
     next(error);
@@ -48,10 +42,7 @@ exports.editFarmer = async (req, res, next) => {
 
     const farmer = await Farmer.findByIdAndUpdate(req.params.id, req.body);
 
-    res.status(200).json({
-      success: true,
-      data: farmer,
-    });
+    res.status(200).json(farmer);
   } catch (error) {
     next(error);
   }
@@ -60,9 +51,7 @@ exports.editFarmer = async (req, res, next) => {
 exports.deleteFarmer = async (req, res, next) => {
   try {
     await Farmer.findByIdAndDelete(req.params.id);
-    res.status(200).json({
-      success: true,
-    });
+    res.status(200).send();
   } catch (error) {
     next(error);
   }
@@ -88,9 +77,8 @@ exports.listFarmers = async (req, res, next) => {
     .sort(sort);   
 
     res.status(200).json({
-      success: true,
-      total: total,
-      data: farmers,
+      total,
+      farmers,
     });
   } catch (error) {
     next(error);

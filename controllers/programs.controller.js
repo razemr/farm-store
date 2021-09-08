@@ -1,17 +1,43 @@
 const Program = require("../models/program.model");
 const Farmer = require("../models/farmer.model");
+const Milestone = require("../models/milestone.model");
 
 exports.addProgram = async (req, res, next) => {
   try {
-    const program = await Program.create(req.body);
+    const { endDate, name, startDate, acres, crop, farmer, template } =
+      req.body;
+
+    let program = await Program.create({
+      crop,
+      farmer,
+      template,
+      endDate,
+      name,
+      startDate,
+      acres,
+    });
+
     await Farmer.findByIdAndUpdate(program.farmer, {
       $push: { programs: program._id },
     });
 
-    return res.status(201).json({
-      success: true,
-      data: program,
+    let milestones = req.body.milestones
+      .sort((a, b) =>
+        new Date(a.date).getTime() > new Date(b.date).getTime() ? 1 : -1
+      )
+      .map((milestone) => ({
+        ...milestone,
+        program: program._id,
+      }));
+    const nextMilestone = milestones[0].date;
+    milestones = await Milestone.create(milestones);
+
+    await Program.findByIdAndUpdate(program._id, {
+      $set: { nextMilestone },
+      $push: { milestones: { $each: milestones.map((m) => m._id) } },
     });
+
+    return res.status(201).json(program);
   } catch (error) {
     if (error.name === "ValidationError") {
       res.status(400).json({
@@ -21,58 +47,6 @@ exports.addProgram = async (req, res, next) => {
     } else {
       next(error);
     }
-  }
-};
-
-exports.getProgram = async (req, res, next) => {
-  try {
-    const program = await Program.findById(req.params.id)
-      .populate("farmer", "firstName lastName")
-      .populate("crop", "name")
-      .populate("company", "name");
-
-    if (!program) {
-      return res.status(404).json({
-        success: false,
-        error: "No program found",
-      });
-    } else {
-      return res.status(200).json({
-        success: true,
-        data: program,
-      });
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.editProgram = async (req, res, next) => {
-  try {
-    delete req.body._id;
-    const program = await Program.findByIdAndUpdate(req.params.id, req.body);
-
-    res.status(200).json({
-      success: true,
-      data: program,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.deleteProgram = async (req, res, next) => {
-  try {
-    const program = await Program.findByIdAndDelete(req.params.id);
-    await Farmer.findByIdAndUpdate(program.farmer, {
-      $pull: { programs: program._id },
-    });
-
-    res.status(200).json({
-      success: true,
-    });
-  } catch (error) {
-    next(error);
   }
 };
 
@@ -87,17 +61,58 @@ exports.listPrograms = async (req, res, next) => {
     const programs = await Program.find({ name: new RegExp(q, "gi") })
       .populate("farmer", "firstName lastName")
       .populate("crop", "name")
-      .populate("company", "name")
-      .select("-milestones")
       .skip((page - 1) * limit)
       .limit(limit)
       .sort(sort);
 
     res.status(200).json({
-      success: true,
-      total: total,
-      data: programs,
+      total,
+      programs
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getProgram = async (req, res, next) => {
+  try {
+    const program = await Program.findById(req.params.id)
+      .populate("farmer", "firstName lastName")
+      .populate("crop", "name")
+      .populate("milestones")
+
+    if (!program) { 
+      return res.status(404).json({
+        success: false,
+        error: "No program found",
+      });
+    } else {
+      return res.status(200).json({program});
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.editProgram = async (req, res, next) => {
+  try {
+    delete req.body._id;
+    const program = await Program.findByIdAndUpdate(req.params.id, req.body);
+
+    res.status(200).json(program);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteProgram = async (req, res, next) => {
+  try {
+    const program = await Program.findByIdAndDelete(req.params.id);
+    await Farmer.findByIdAndUpdate(program.farmer, {
+      $pull: { programs: program._id },
+    });
+
+    res.status(200).send("success");
   } catch (error) {
     next(error);
   }

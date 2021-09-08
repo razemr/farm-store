@@ -1,55 +1,12 @@
+import { useContext } from "react";
+import {GlobalContext} from "../../context/GlobalState";
 import { Grid, TextField } from "@material-ui/core";
 import { SelectControl } from "../index";
-
-const products = [
-  {
-    key: "1",
-    label: "15-5-35",
-    value: "1",
-  },
-  {
-    key: "2",
-    label: "Diuron",
-    value: "2",
-  },
-  {
-    key: "3",
-    label: "15-28-28 - CalciFersan",
-    value: "3",
-  },
-];
-
-const units = [
-  {
-    key: "1",
-    label: "lb",
-    value: "lb",
-  },
-  {
-    key: "2",
-    label: "kg",
-    value: "kg",
-  },
-  {
-    key: "3",
-    label: "pack",
-    value: "pack",
-  },
-  {
-    key: "4",
-    label: "l",
-    value: "l",
-  },
-  {
-    key: "5",
-    label: "gal",
-    value: "gal",
-  },
-];
 
 export default function ProductRow(props) {
   const { onChange, onBlur, product, quantity, unit, name, errors, touched } =
     props;
+    const {products, units} = useContext(GlobalContext);
 
   return (
     <Grid container>
@@ -57,7 +14,11 @@ export default function ProductRow(props) {
         <SelectControl
           name={`${name}.product`}
           label="Product"
-          options={products}
+          options={products ? products.map(({_id, name}) => ({
+            key: _id,
+            value: _id,
+            label: name
+          })): []}
           value={product}
           onChange={onChange}
           onBlur={onBlur}
@@ -94,7 +55,11 @@ export default function ProductRow(props) {
         <SelectControl
           name={`${name}.unit`}
           label="Unit"
-          options={units}
+          options={units ? units.map(({_id, name}) => ({
+            key: _id,
+            value: _id,
+            label: name
+          })): []}
           value={unit}
           onChange={onChange}
           onBlur={onBlur}

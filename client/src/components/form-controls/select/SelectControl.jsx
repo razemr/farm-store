@@ -13,13 +13,12 @@ export default function SelectControl(props) {
     <FormControl error={error}>
       <InputLabel>{label}</InputLabel>
       <Select name={name} value={value} onChange={onChange}>
-        {options &&
-          options.length > 0 &&
-          options.map((o) => (
-            <MenuItem key={o.key} value={o.value}>
-              {o.label}
-            </MenuItem>
-          ))}
+        <MenuItem value=""></MenuItem>
+        {options.map((option) => (
+          <MenuItem key={option.key} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
       </Select>
       <FormHelperText hidden={helperText === "" || helperText === undefined}>
         {helperText}

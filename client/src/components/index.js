@@ -13,6 +13,8 @@ import ProgramDialog from "./program-dialog/ProgramDialog";
 import ProgramStepper from "./program-stepper/ProgramStepper";
 import {CustomDialogTitle} from "./custom-dialog-title/CustomDialogTitle";
 import RadioControl from "./form-controls/radio/RadioControl";
+import MilestoneTimeline from "./milestone-timeline/MilestoneTimeline";
+import ProgramDetails from "./program-details/ProgramDetails";
 
 export {
   Topbar,
@@ -29,5 +31,7 @@ export {
   ProgramDialog,
   ProgramStepper,
   CustomDialogTitle,
-  RadioControl
+  RadioControl,
+  MilestoneTimeline,
+  ProgramDetails
 }
