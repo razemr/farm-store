@@ -1,5 +1,7 @@
 import "./Dashboard.css";
-import { FeaturedCard, MilestoneWidget, CalendarWidget } from "../../components";
+import { CalendarWidget } from "../../components/CalendarWidget";
+import { FeaturedCard } from "../../components/FeaturedCard";
+import { MilestoneWidget } from "../../components/MilestoneWidget";
 import { Container } from "@material-ui/core";
 
 export default function Dashboard() {

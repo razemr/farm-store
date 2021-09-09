@@ -1,4 +1,4 @@
-const Farmer = require("../models/farmer.model");
+const Farmer = require('../models/farmer.model');
 
 exports.addFarmer = async (req, res, next) => {
   try {
@@ -7,10 +7,10 @@ exports.addFarmer = async (req, res, next) => {
     const farmer = await Farmer.create(req.body);
     return res.status(201).json(farmer);
   } catch (error) {
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       res.status(400).json({
         success: false,
-        error: "Farmer already exist.",
+        error: 'Farmer already exist.',
       });
     } else {
       next(error);
@@ -25,7 +25,7 @@ exports.getFarmer = async (req, res, next) => {
     if (!farmer) {
       return res.status(404).json({
         success: false,
-        error: "No farmer found",
+        error: 'No farmer found',
       });
     } else {
       return res.status(200).json(farmer);
@@ -72,9 +72,9 @@ exports.listFarmers = async (req, res, next) => {
 
     const total = await Farmer.count(searchQuery);
     const farmers = await Farmer.find(searchQuery)
-    .skip((page - 1) * limit)
-    .limit(limit)
-    .sort(sort);   
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort(sort);
 
     res.status(200).json({
       total,

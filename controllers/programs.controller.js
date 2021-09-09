@@ -1,6 +1,6 @@
-const Program = require("../models/program.model");
-const Farmer = require("../models/farmer.model");
-const Milestone = require("../models/milestone.model");
+const Program = require('../models/program.model');
+const Farmer = require('../models/farmer.model');
+const Milestone = require('../models/milestone.model');
 
 exports.addProgram = async (req, res, next) => {
   try {
@@ -23,7 +23,7 @@ exports.addProgram = async (req, res, next) => {
 
     let milestones = req.body.milestones
       .sort((a, b) =>
-        new Date(a.date).getTime() > new Date(b.date).getTime() ? 1 : -1
+        new Date(a.date).getTime() > new Date(b.date).getTime() ? 1 : -1,
       )
       .map((milestone) => ({
         ...milestone,
@@ -39,10 +39,10 @@ exports.addProgram = async (req, res, next) => {
 
     return res.status(201).json(program);
   } catch (error) {
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       res.status(400).json({
         success: false,
-        error: "Program already exist.",
+        error: 'Program already exist.',
       });
     } else {
       next(error);
@@ -53,21 +53,21 @@ exports.addProgram = async (req, res, next) => {
 exports.listPrograms = async (req, res, next) => {
   try {
     const { q, _limit, _page, _sort } = req.query;
-    const limit = _limit ? Number(_limit) : 10;
+    const limit = _limit ? Number(_limit) : 50;
     const page = _page ? Number(_page) : 1;
-    const sort = _sort ? _sort.split(",").join(" ") : "name";
+    const sort = _sort ? _sort.split(',').join(' ') : 'name';
 
-    const total = await Program.count({ name: new RegExp(q, "gi") });
-    const programs = await Program.find({ name: new RegExp(q, "gi") })
-      .populate("farmer", "firstName lastName")
-      .populate("crop", "name")
+    const total = await Program.count({ name: new RegExp(q, 'gi') });
+    const programs = await Program.find({ name: new RegExp(q, 'gi') })
+      .populate('farmer', 'firstName lastName')
+      .populate('crop', 'name')
       .skip((page - 1) * limit)
       .limit(limit)
       .sort(sort);
 
     res.status(200).json({
       total,
-      programs
+      programs,
     });
   } catch (error) {
     next(error);
@@ -77,17 +77,30 @@ exports.listPrograms = async (req, res, next) => {
 exports.getProgram = async (req, res, next) => {
   try {
     const program = await Program.findById(req.params.id)
-      .populate("farmer", "firstName lastName")
-      .populate("crop", "name")
-      .populate("milestones")
+      .populate('farmer', 'firstName lastName')
+      .populate('crop', 'name')
+      .populate({
+        path: 'milestones',
+        populate: [
+          {
+            path: 'productApplications.unit',
+          },
+          {
+            path: 'productApplications.product',
+            populate: {
+              path: 'category',
+            },
+          },
+        ],
+      });
 
-    if (!program) { 
+    if (!program) {
       return res.status(404).json({
         success: false,
-        error: "No program found",
+        error: 'No program found',
       });
     } else {
-      return res.status(200).json({program});
+      return res.status(200).json({ program });
     }
   } catch (error) {
     next(error);
@@ -112,7 +125,7 @@ exports.deleteProgram = async (req, res, next) => {
       $pull: { programs: program._id },
     });
 
-    res.status(200).send("success");
+    res.status(200).send('success');
   } catch (error) {
     next(error);
   }

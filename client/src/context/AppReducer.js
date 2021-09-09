@@ -15,7 +15,7 @@ const variable = (state, action) => {
     case "postprograms":
       return {
         ...state,
-        programs: [action.payload.programs, ...state.programs],
+        //programs: [action.payload.programs, ...state.programs],
       };
     case "listcrops":
       return {
