@@ -1,90 +1,22 @@
-import { useContext, useEffect } from "react";
-import {GlobalContext} from "../../context/GlobalState";
-import {
-  Paper,
-  Grid,
-  makeStyles,
-  TextField,
-  Button,
-  IconButton,
-} from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
-import { Formik, FieldArray } from "formik";
-import * as Yup from "yup";
-import { SelectControl } from "../FormControls/SelectControl";
-import { DatePickerControl } from "../FormControls/DatePickerControl";
-import {MilestoneForm} from "../MilestoneForm";
-
-const useStyles = makeStyles({
-  paper: {
-    margin: "0 20px",
-    padding: "20px",
-  },
-  form: {
-    "& .MuiFormControl-root": {
-      width: "70%",
-      marginBottom: "20px",
-    },
-  },
-  milestoneForm: {
-    width: "100%",
-    position: "relative",
-  },
-  close: {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-  },
-});
+import { Paper, Grid, TextField, Button, IconButton } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
+import { Formik, FieldArray } from 'formik';
+import { SelectControl } from '../FormControls/SelectControl';
+import { DatePickerControl } from '../FormControls/DatePickerControl';
+import { MilestoneForm } from '../MilestoneForm';
+import { validationSchema } from './validationSchema';
+import { useStyles } from './useStyles';
 
 export default function ProgramForm(props) {
-  const { program, onSubmit } = props;
-  const { listItems, postItem, farmers, crops} = useContext(GlobalContext);
+  const { program, onSubmit, farmers, crops, units, products } = props;
   const classes = useStyles();
-
-  useEffect(()=> {
-    listItems(["farmers", "crops", "products", "units"])
-  }, []);
-
-  const validationSchema = Yup.object({
-    name: Yup.string().required("Program name is required"),
-    farmer: Yup.string().required("Farmer is required"),
-    startDate: Yup.date()
-      .nullable()
-      .typeError("Invalid Date")
-      .required("Start date is required"),
-    endDate: Yup.date()
-      .nullable()
-      .typeError("Invalid Date")
-      .min(Yup.ref("startDate"), "End date must be after start date")
-      .required("End date is required"),
-    acres: Yup.number().moreThan(0).required("Number of acres is required"),
-    crop: Yup.string().required("Crop is required"),
-    milestones: Yup.array().of(
-      Yup.object().shape({
-        date: Yup.date()
-          .nullable()
-          .typeError("Invalid Date")
-          .required("Start date is required"),
-        productApplications: Yup.array().of(
-          Yup.object().shape({
-            product: Yup.string().required("Product is required"),
-            quantity: Yup.number().moreThan(0, "Quantity must be grater than zero").required("Quantity is required"),
-            unit: Yup.string().required("Unit is required"),
-          })
-        ),
-      })
-    ),
-  });
 
   return (
     <Formik
       initialValues={program}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log(values)
-        postItem("programs", values);
-        onSubmit();
+        onSubmit(values);
       }}
     >
       {({
@@ -114,11 +46,15 @@ export default function ProgramForm(props) {
                   value={values.crop}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  options={crops ? crops.map(({_id, name}) => ({
-                    key: _id,
-                    value: _id,
-                    label: name
-                  })): []}
+                  options={
+                    crops
+                      ? crops.map(({ _id, name }) => ({
+                          key: _id,
+                          value: _id,
+                          label: name,
+                        }))
+                      : []
+                  }
                   error={touched.crop && Boolean(errors.crop)}
                   helperText={touched.crop ? errors.crop : null}
                 ></SelectControl>
@@ -139,11 +75,15 @@ export default function ProgramForm(props) {
                   value={values.farmer}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  options={farmers ? farmers.map(({_id, firstName, lastName}) => ({
-                    key: _id,
-                    value: _id,
-                    label: `${firstName} ${lastName}`
-                  })): []}
+                  options={
+                    farmers
+                      ? farmers.map(({ _id, firstName, lastName }) => ({
+                          key: _id,
+                          value: _id,
+                          label: `${firstName} ${lastName}`,
+                        }))
+                      : []
+                  }
                   error={touched.farmer && Boolean(errors.farmer)}
                   helperText={touched.farmer ? errors.farmer : null}
                 ></SelectControl>
@@ -154,7 +94,7 @@ export default function ProgramForm(props) {
                   value={values.acres}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  inputProps={{ step: "any", min: "0" }}
+                  inputProps={{ step: 'any', min: '0' }}
                   error={touched.acres && Boolean(errors.acres)}
                   helperText={touched.acres ? errors.acres : null}
                 />
@@ -169,7 +109,7 @@ export default function ProgramForm(props) {
                 />
               </Grid>
             </Grid>
-            <h3 style={{ margin: "10px 0" }}>Milestones:</h3>
+            <h3 style={{ margin: '10px 0' }}>Milestones:</h3>
             <FieldArray
               name="milestones"
               render={(arrayHelpers) => (
@@ -187,6 +127,8 @@ export default function ProgramForm(props) {
                         )}
 
                         <MilestoneForm
+                          units={units}
+                          products={products}
                           productApplications={
                             values.milestones[index].productApplications
                           }
@@ -208,15 +150,15 @@ export default function ProgramForm(props) {
                       </div>
                     ))}
                   <Button
-                    style={{ marginTop: "20px" }}
+                    style={{ marginTop: '20px' }}
                     onClick={() =>
                       arrayHelpers.push({
                         date: null,
                         productApplications: [
                           {
-                            product: "",
-                            quantity: "",
-                            unit: "",
+                            product: '',
+                            quantity: '',
+                            unit: '',
                           },
                         ],
                       })
@@ -227,7 +169,7 @@ export default function ProgramForm(props) {
                 </div>
               )}
             />
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <Button
                 variant="contained"
                 color="primary"

@@ -1,12 +1,19 @@
-import { useContext } from "react";
-import {GlobalContext} from "../../context/GlobalState";
-import { Grid, TextField } from "@material-ui/core";
-import { SelectControl } from "../FormControls/SelectControl";
+import { Grid, TextField } from '@material-ui/core';
+import { SelectControl } from '../FormControls/SelectControl';
 
 export default function ProductRow(props) {
-  const { onChange, onBlur, product, quantity, unit, name, errors, touched } =
-    props;
-    const {products, units} = useContext(GlobalContext);
+  const {
+    onChange,
+    onBlur,
+    product,
+    quantity,
+    unit,
+    name,
+    errors,
+    touched,
+    units,
+    products,
+  } = props;
 
   return (
     <Grid container>
@@ -14,11 +21,15 @@ export default function ProductRow(props) {
         <SelectControl
           name={`${name}.product`}
           label="Product"
-          options={products ? products.map(({_id, name}) => ({
-            key: _id,
-            value: _id,
-            label: name
-          })): []}
+          options={
+            products
+              ? products.map(({ _id, name }) => ({
+                  key: _id,
+                  value: _id,
+                  label: name,
+                }))
+              : []
+          }
           value={product}
           onChange={onChange}
           onBlur={onBlur}
@@ -40,7 +51,7 @@ export default function ProductRow(props) {
           value={quantity}
           onChange={onChange}
           onBlur={onBlur}
-          inputProps={{ step: "any", min: "0" }}
+          inputProps={{ step: 'any', min: '0' }}
           error={
             touched && touched.quantity && errors && errors.quantity
               ? true
@@ -55,11 +66,15 @@ export default function ProductRow(props) {
         <SelectControl
           name={`${name}.unit`}
           label="Unit"
-          options={units ? units.map(({_id, name}) => ({
-            key: _id,
-            value: _id,
-            label: name
-          })): []}
+          options={
+            units
+              ? units.map(({ _id, name }) => ({
+                  key: _id,
+                  value: _id,
+                  label: name,
+                }))
+              : []
+          }
           value={unit}
           onChange={onChange}
           onBlur={onBlur}

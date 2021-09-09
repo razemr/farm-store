@@ -1,29 +1,27 @@
-import { Grid, IconButton, makeStyles } from "@material-ui/core";
-import {DatePickerControl} from "../FormControls/DatePickerControl";
-import {ProductRow} from "../ProductRow";
-import { FieldArray } from "formik";
-import { Close, Add } from "@material-ui/icons";
-
-const useStyles = makeStyles({
-  productRow: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-});
+import './MilestoneForm.css';
+import { Grid, IconButton } from '@material-ui/core';
+import { DatePickerControl } from '../FormControls/DatePickerControl';
+import { ProductRow } from '../ProductRow';
+import { FieldArray } from 'formik';
+import { Close, Add } from '@material-ui/icons';
+import { useStyles } from './useStyles';
 
 export default function MilestoneForm(props) {
-  const { date, productApplications, onChange, onBlur, name, errors, touched } =
-    props;
+  const {
+    date,
+    productApplications,
+    onChange,
+    onBlur,
+    name,
+    errors,
+    touched,
+    units,
+    products,
+  } = props;
   const classes = useStyles();
 
   return (
-    <div
-      style={{
-        border: "1px solid #f5f0f0",
-        padding: "20px",
-        marginBottom: "20px",
-      }}
-    >
+    <div className="form-container">
       <Grid container>
         <Grid item xs={4}>
           <DatePickerControl
@@ -32,7 +30,9 @@ export default function MilestoneForm(props) {
             value={date}
             onBlur={onBlur}
             onChange={onChange}
-            error={touched && errors && touched.date && errors.date ? true : false}
+            error={
+              touched && errors && touched.date && errors.date ? true : false
+            }
             helperText={touched && errors && touched.date ? errors.date : null}
           />
         </Grid>
@@ -45,6 +45,8 @@ export default function MilestoneForm(props) {
               productApplications.map((p, index) => (
                 <div className={classes.productRow} key={index}>
                   <ProductRow
+                    units={units}
+                    products={products}
                     product={p.product}
                     quantity={p.quantity}
                     unit={p.unit}
@@ -63,7 +65,7 @@ export default function MilestoneForm(props) {
                     }
                   />
                   <IconButton
-                    style={{ visibility: index === 0 && "hidden" }}
+                    style={{ visibility: index === 0 && 'hidden' }}
                     onClick={(e) => arrayHelpers.remove(index)}
                   >
                     <Close />
@@ -73,9 +75,9 @@ export default function MilestoneForm(props) {
             <IconButton
               onClick={(e) =>
                 arrayHelpers.push({
-                  product: "",
-                  quantity: "",
-                  unit: "",
+                  product: '',
+                  quantity: '',
+                  unit: '',
                 })
               }
             >

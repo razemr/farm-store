@@ -17,6 +17,8 @@ exports.addProgram = async (req, res, next) => {
       acres,
     });
 
+    req.params.id = program._id;
+
     await Farmer.findByIdAndUpdate(program.farmer, {
       $push: { programs: program._id },
     });
@@ -37,7 +39,7 @@ exports.addProgram = async (req, res, next) => {
       $push: { milestones: { $each: milestones.map((m) => m._id) } },
     });
 
-    return res.status(201).json(program);
+    next();
   } catch (error) {
     if (error.name === 'ValidationError') {
       res.status(400).json({

@@ -9,7 +9,7 @@ router.route('/:id')
 
     router.route('/')
     .get(listPrograms)
-    .post(addProgram)
+    .post(addProgram, getProgram)
 
 module.exports = router;
 

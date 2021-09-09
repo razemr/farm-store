@@ -1,0 +1,24 @@
+.crop-name {
+  display: flex;
+  align-items: center;
+}
+
+.crop-image {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.MuiDataGrid-root .MuiDataGrid-cell:focus,
+.MuiDataGrid-root .MuiDataGrid-cell:focus-within,
+.MuiDataGrid-root .MuiDataGrid-columnHeader:focus,
+.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
+  outline: none !important;
+}
+
+.grid-container {
+  display: flex;
+  height: 100%;
+  padding: 0 20px;
+}
