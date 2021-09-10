@@ -1,7 +1,11 @@
-import { DISPATCH_ACTIONS as ACTIONS } from "./ContextConstants";
+import { DISPATCH_ACTIONS as ACTIONS } from './ContextConstants';
+import pluralize from 'pluralize';
 
 const variable = (state, action) => {
-  switch (action.type) {
+  let resources = action.type.route;
+  let resource = resources ? pluralize.singular(resources) : '';
+
+  switch (action.type.name) {
     case ACTIONS.loading:
       return {
         ...state,
@@ -12,48 +16,14 @@ const variable = (state, action) => {
         ...state,
         loading: false,
       };
-    case "postprograms":
-      return {
-        ...state,
-        program: action.payload.program,
-      };
-    case "listcrops":
-      return {
-        ...state,
-        crops: action.payload.crops,
-      };
-    case "listproducts":
-      return {
-        ...state,
-        products: action.payload.products,
-      };
-    case "listfarmers":
-      return {
-        ...state,
-        farmers: action.payload.farmers,
-      };
-    case "listunits":
-      return {
-        ...state,
-        units: action.payload.units,
-      };
-    case "listprogram-templates":
-      return {
-        ...state,
-        programTemplates: action.payload.programTemplates,
-      };
-    case "listprograms":
-      return {
-        ...state,
-        programs: action.payload.programs,
-      };
-    case "getprograms":
-      return {
-        ...state,
-        program: action.payload.program,
-      };
+    case ACTIONS.single:
+      state[resource] = action.payload[resource];
+      return { ...state };
+    case ACTIONS.multiple:
+      state[resources] = action.payload[resources];
+      return { ...state };
     default:
-      return state;
+      return { ...state };
   }
 };
 

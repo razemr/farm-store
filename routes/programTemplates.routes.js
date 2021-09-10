@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addProgramTemplate, getProgramTemplate, editProgramTemplate, deleteProgramTemplate, listProgramTemplates } = require('../controllers/program-templates.controller');
+const { addProgramTemplate, getProgramTemplate, editProgramTemplate, deleteProgramTemplate, listProgramTemplates } = require('../controllers/programTemplates.controller');
 
 router.route('/')
     .get(listProgramTemplates)

@@ -1,16 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { addProgram, getProgram, editProgram, deleteProgram, listPrograms } = require('../controllers/programs.controller');
+const {
+  addProgram,
+  getProgram,
+  editProgram,
+  deleteProgram,
+  listPrograms,
+  updateMilestoneStatus
+} = require('../controllers/programs.controller');
 
-router.route('/:id')
-    .get(getProgram)
-    .put(editProgram)
-    .delete(deleteProgram)
+router
+  .route('/:id')
+  .get(getProgram)
+  .put(editProgram)
+  .delete(deleteProgram)
+  .patch(updateMilestoneStatus, getProgram);
 
-    router.route('/')
-    .get(listPrograms)
-    .post(addProgram, getProgram)
-
-module.exports = router;
+router.route('/').get(listPrograms).post(addProgram, getProgram);
 
 module.exports = router;

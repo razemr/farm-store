@@ -44,21 +44,12 @@ const useStyles = makeStyles({
 });
 
 export default function MilestoneTimeline(props) {
-  const { milestones } = props;
-  const [statusMilestones, setStatusMilestones] =
-    useMilestoneStatus(milestones);
+  const { milestones, onCheck, nextMilestone } = props;
+  const statusMilestones = useMilestoneStatus(milestones, nextMilestone);
   const classes = useStyles();
 
-  const handleCheck = (e, index) => {
-    setStatusMilestones(
-      statusMilestones.map((s, i) => {
-        if (i === index) {
-          return { ...s, notifiedFarmer: e.target.value };
-        } else {
-          return s;
-        }
-      }),
-    );
+  const handleCheck = (status, id) => {
+    onCheck(status, id);
   };
 
   return (
@@ -96,9 +87,10 @@ export default function MilestoneTimeline(props) {
               <Paper elevation={3} style={{ padding: '10px 20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <CheckboxControl
-                    label="Complete"
+                    label="Done"
                     value={milestone.notifiedFarmer}
-                    onChange={(e) => handleCheck(e, index)}
+                    onChange={(e) => handleCheck(e.target.value, milestone._id)}
+                    disabled={!milestone.active}
                   />
                 </div>
                 <List>

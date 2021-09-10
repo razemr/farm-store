@@ -45,7 +45,7 @@ import {
             {/* <ListSubheader component="div">Main</ListSubheader> */}
             <ListItemLink to="/" primary="Dashboard" icon={<Dashboard />}/>
             <ListItemLink to="/programs" primary="Programs" icon={<Timeline />}/>
-            <ListItemLink to="/" primary="Milestones" icon={<Star />}/>
+            <ListItemLink to="/milestones" primary="Milestones" icon={<Star />}/>
             {/* <ListSubheader component="div">Database</ListSubheader> */}
             <ListItemLink to="/" primary="Farmers" icon={<PeopleAlt />}/>
             <ListItemLink to="/" primary="Products" icon={<Storefront />}/>

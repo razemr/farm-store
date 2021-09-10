@@ -1,11 +1,5 @@
 import './ListPrograms.css';
-import {
-  IconButton,
-  Input,
-  InputAdornment,
-  Container,
-  Paper
-} from '@material-ui/core';
+import { Button, Input, InputAdornment, Container } from '@material-ui/core';
 import { ProgramTable } from '../../components/ProgramTable';
 import { Search, Add } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
@@ -53,19 +47,22 @@ export default function ListPrograms() {
               </InputAdornment>
             }
           />
-          <IconButton
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => setOpenDialog(true)}
             className={classes.createButton}
+            startIcon={<Add/>}
           >
-            <Add />
-          </IconButton>
+            Create
+          </Button>
         </div>
       </div>
-        <ProgramTable
-          onView={handleOnView}
-          onEdit={handleOnEdit}
-          programs={programs}
-        />
+      <ProgramTable
+        onView={handleOnView}
+        onEdit={handleOnEdit}
+        programs={programs}
+      />
       <ProgramDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}

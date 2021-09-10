@@ -1,4 +1,4 @@
-const ProgramTemplate = require('../models/program-template.model');
+const ProgramTemplate = require('../models/programTemplate.model');
 
 exports.addProgramTemplate = async (req, res, next) => {
   try {

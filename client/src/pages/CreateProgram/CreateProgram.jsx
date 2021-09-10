@@ -17,7 +17,6 @@ export default function CreateProgram(props) {
 
   const handleSubmit = (values) => {
     postItem('programs', values);
-    console.log(program)
     history.push(`/programs/${program._id}`);
   };
   return (

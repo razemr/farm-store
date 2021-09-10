@@ -67,7 +67,7 @@ export default function ProgramStepper(props) {
   const steps = getSteps();
 
   useEffect(() => {
-    listItems(['farmers', 'program-templates']);
+    listItems(['farmers', 'programTemplates']);
   }, []);
 
   const validationSchema = Yup.object({

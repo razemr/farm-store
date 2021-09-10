@@ -1,8 +1,7 @@
 import { FormControl, FormControlLabel, Checkbox } from '@material-ui/core';
 
 export default function CheckboxControl(props) {
-  const { name, label, value, onChange } = props;
-
+  const { name, label, value, onChange, disabled} = props;
   const convertToDefEventPara = (name, value) => ({
     target: {
       name,
@@ -15,6 +14,7 @@ export default function CheckboxControl(props) {
       <FormControlLabel
         control={
           <Checkbox
+            disabled={disabled}
             name={name}
             color="primary"
             checked={value}

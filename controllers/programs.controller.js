@@ -47,7 +47,10 @@ exports.addProgram = async (req, res, next) => {
         error: 'Program already exist.',
       });
     } else {
-      next(error);
+      return res.status(500).json({
+        success: false,
+        error: 'Server Error',
+      });
     }
   }
 };
@@ -117,6 +120,43 @@ exports.editProgram = async (req, res, next) => {
     res.status(200).json(program);
   } catch (error) {
     next(error);
+  }
+};
+
+exports.updateMilestoneStatus = async (req, res, next) => {
+  try {
+    await Milestone.findByIdAndUpdate(req.body.id, {
+      notifiedFarmer: req.body.status,
+    });
+
+    const program = await Program.findById(req.params.id).populate(
+      'milestones',
+      'date notifiedFarmer',
+    );
+
+    let nextMilestone = program.nextMilestone;
+
+    const filteredMilestones = program.milestones.filter(
+      (milestone) => !milestone.notifiedFarmer,
+    );
+
+    if (filteredMilestones.length === 0) {
+      nextMilestone = program.milestones.reduce((a, b) => {
+        return new Date(a.date).getTime() > new Date(b.date).getTime() ? a : b;
+      }, program.milestones[0]).date;
+    } else {
+      nextMilestone = filteredMilestones.reduce((a, b) => {
+        return new Date(a.date).getTime() < new Date(b.date).getTime() ? a : b;
+      }, filteredMilestones[0]).date;
+    }
+
+    await Program.findByIdAndUpdate(req.params.id, { nextMilestone });
+    next();
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server Error',
+    });
   }
 };
 

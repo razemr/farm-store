@@ -1,5 +1,5 @@
 import { IconButton } from '@material-ui/core';
-import { Edit, Visibility, PriorityHigh, Close } from '@material-ui/icons';
+import { Edit, Search, PriorityHigh, Close } from '@material-ui/icons';
 import { compareDates } from '../../utils/compareDates';
 
 const columnDefaults = {
@@ -23,9 +23,26 @@ export const createColumns = (onView, onEdit) => [
             className="crop-image"
             alt="user"
           ></img>
-          <span>
-            {params.row.name}
-          </span>
+          <span>{params.row.name}</span>
+        </div>
+      );
+    },
+  },
+
+  {
+    ...columnDefaults,
+    field: 'nextMilestone',
+    headerName: 'Next Milestone',
+    flex: 1,
+    renderCell: (params) => {
+      const date = new Date(params.row.nextMilestone);
+      const today = new Date();
+      const status = compareDates(date, today);
+
+      return (
+        <div className="next-milestone">
+          <div>{date.toLocaleDateString()}</div>
+          {status < 0 && <PriorityHigh color="error" fontSize="small" />}
         </div>
       );
     },
@@ -37,7 +54,11 @@ export const createColumns = (onView, onEdit) => [
     headerName: 'Farmer',
     flex: 1,
     renderCell: (params) => {
-      return (<>{params.row.farmer.firstName} {params.row.farmer.lastName}</>)
+      return (
+        <>
+          {params.row.farmer.firstName} {params.row.farmer.lastName}
+        </>
+      );
     },
   },
   {
@@ -51,26 +72,6 @@ export const createColumns = (onView, onEdit) => [
   },
   {
     ...columnDefaults,
-    field: 'nextMilestone',
-    headerName: 'Next Milestone',
-    flex: 1,
-    renderCell: (params) => {
-      const date = new Date(params.row.nextMilestone);
-      const today = new Date();
-      const status = compareDates(date, today);
-
-      return (
-        <div>
-          <span>{date.toDateString()}</span>
-          {status < 0 && <IconButton color="secondary">
-            <PriorityHigh />
-          </IconButton>}
-        </div>
-      );
-    },
-  },
-  {
-    ...columnDefaults,
     sortable: false,
     field: 'action',
     headerName: 'Actions',
@@ -78,14 +79,14 @@ export const createColumns = (onView, onEdit) => [
     renderCell: (params) => {
       return (
         <div>
-          <IconButton onClick={(e) => onView(params.row._id)} color="primary">
-            <Visibility />
+          <IconButton onClick={(e) => onView(params.row._id)}>
+            <Search color="primary" fontSize="small"/>
           </IconButton>
           <IconButton>
-            <Edit />
+            <Edit color="action" fontSize="small" />
           </IconButton>
-          <IconButton color="secondary">
-            <Close />
+          <IconButton>
+            <Close color="error" fontSize="small" />
           </IconButton>
         </div>
       );

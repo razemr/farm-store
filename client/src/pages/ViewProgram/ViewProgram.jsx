@@ -6,12 +6,20 @@ import { MilestoneTimeline } from '../../components/MilestoneTimeline';
 import { Paper } from '@material-ui/core';
 
 export default function ViewProgram() {
-  const { getItem, program } = useContext(GlobalContext);
+  const { getItem, program, patchItem } = useContext(GlobalContext);
   const { id } = useParams();
 
   useEffect(() => {
     getItem('programs', id);
   }, []);
+
+  const handleCheck = (status, id) => {
+    patchItem('programs', program._id, {
+      target: 'milestoneStatus',
+      status,
+      id
+    });
+  };
 
   return (
     <>
@@ -21,7 +29,11 @@ export default function ViewProgram() {
       <Paper>
         <ProgramDetails program={program} />
       </Paper>
-      <MilestoneTimeline milestones={program.milestones} />
+      <MilestoneTimeline
+        milestones={program.milestones}
+        nextMilestone={program.nextMilestone}
+        onCheck={handleCheck}
+      />
     </>
   );
 }

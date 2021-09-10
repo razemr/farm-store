@@ -5,4 +5,6 @@ export const DISPATCH_ACTIONS = {
   loading: "LOADING",
   doneLoading: "DONE_LOADING",
   error: "ERROR",
+  single: "SINGLE",
+  multiple: "MULTIPLE"
 };
