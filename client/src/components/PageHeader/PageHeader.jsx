@@ -5,7 +5,7 @@ export default function PageHeader(props) {
     const {title} = props;
     return (
         <div className="page-header">
-            <Typography variant="h6" component="h1" color="textSecondary">
+            <Typography variant="h1" color="textSecondary">
                 {title}
             </Typography>
         </div>

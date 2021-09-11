@@ -25,47 +25,40 @@ export const MilestoneTimelineContent = (props) => {
     <TimelineContent className="content-wrapper">
       <Paper elevation={10} className="milestone-content">
         <Paper elevation={10} className="date-container">
-          <Typography variant="h3" align="center">
+          <Typography variant="h4" align="center">
             {getDateDay(new Date(milestone.date))}
           </Typography>
-          <Typography align="center" variant="subtitle1">
-            {new Date(milestone.date).toLocaleDateString('en-US', {
-              month: 'short',
-            })}
-          </Typography>
+          <small>
+            <Typography align="center" variant="subtitle1">
+              {new Date(milestone.date).toLocaleDateString('en-US', {
+                month: 'short',
+              })}
+            </Typography>
+          </small>
         </Paper>
 
         <div class="milestone-applications">
-        <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Product</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Unit</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-        {milestone.productApplications &&
-            milestone.productApplications.map((application, index) => (
-
-                <TableRow key={index}>
-                <TableCell>
-                {application.product.name}
-                </TableCell>
-                <TableCell align="right">{application.quantity} </TableCell>
-                <TableCell align="right">{application.unit.name}</TableCell>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Product</TableCell>
+                <TableCell align="right">Quantity</TableCell>
+                <TableCell align="right">Unit</TableCell>
               </TableRow>
+            </TableHead>
+            <TableBody>
+              {milestone.productApplications &&
+                milestone.productApplications.map((application, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{application.product.name}</TableCell>
+                    <TableCell align="right">{application.quantity} </TableCell>
+                    <TableCell align="right">{application.unit.name}</TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
 
-            ))}
-        </TableBody>
-      </Table>
-
-
-
-
-
-
-        {/* <Typography variant="subtitle1" color="textSecondary">Applications:</Typography>
+          {/* <Typography variant="subtitle1" color="textSecondary">Applications:</Typography>
           {milestone.productApplications &&
             milestone.productApplications.map((application) => (
 

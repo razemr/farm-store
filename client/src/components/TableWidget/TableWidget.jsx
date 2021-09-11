@@ -24,13 +24,13 @@ export default function TableWidget(props) {
   return (
     <Paper elevation={10} className="table-wrapper">
       <Paper className="table-header">
-      <Typography align="right" variant="subtitle1">
-        {title}
-      </Typography>
-      <Typography align="right" variant="caption">
-        Total Programs: 87
-      </Typography>
-        </Paper>
+        <Typography align="right" variant="h2">
+          {title}
+        </Typography>
+        <Typography align="right" variant="subtitle1">
+          Total Programs: 87
+        </Typography>
+      </Paper>
       <DataGrid
         classes={{ root: classes.root, cell: classes.cell }}
         rows={rows}

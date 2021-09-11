@@ -6,23 +6,26 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Link as RouterLink } from 'react-router-dom';
 
 export default function ListItemLink(props) {
-  const { icon, primary, to } = props;
+  const { icon, primary, to, ...other } = props;
+
+  const disabledIcon = React.isValidElement(icon) ? React.cloneElement(icon, {color: "disabled"}) : '';
 
   const renderLink = React.useMemo(
     () =>
       React.forwardRef((itemProps, ref) => (
         <RouterLink to={to} ref={ref} {...itemProps} />
       )),
-    [to]
+    [to],
   );
 
   return (
-    <li>
-      <ListItem button component={renderLink} color="">
-        {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} primaryTypographyProps={{color: "textSecondary"}}/>
-      </ListItem>
-    </li>
+    <ListItem {...other} component={renderLink} color="">
+      {icon ? <ListItemIcon>{disabledIcon}</ListItemIcon> : null}
+      <ListItemText
+        primary={primary}
+        primaryTypographyProps={{ variant: 'h3' }}
+      />
+    </ListItem>
   );
 }
 

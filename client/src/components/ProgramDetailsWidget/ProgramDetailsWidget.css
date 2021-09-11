@@ -1,7 +1,7 @@
 .details-wrapper {
     position: relative;
     margin-top: 50px;
-    padding: 70px 20px 20px 20px;
+    padding: 70px 32px 32px 32px;
 }
 
 .details-image {
@@ -13,4 +13,39 @@
     top: -60px;
     border-radius: 50%;
     box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+}
+
+.crop-name {
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.property-grid {
+    margin-top: 16px;
+}
+
+.program-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.property-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.property-title {
+    display: flex;
+}
+
+.property-icon {
+    margin-right: 10px;
+}
+
+.property-value {
+    margin-left: 34px;
 }
