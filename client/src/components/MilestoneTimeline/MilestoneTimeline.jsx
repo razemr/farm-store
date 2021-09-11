@@ -1,7 +1,6 @@
 import {
   Timeline,
   TimelineItem,
-  TimelineOppositeContent,
   TimelineSeparator,
   TimelineDot,
   TimelineConnector,
@@ -23,12 +22,18 @@ import {
   RemoveCircle,
 } from '@material-ui/icons';
 import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
-import { useState, useEffect } from 'react';
 import { ProductCategoryIcon } from '../ProductCategoryIcon';
 import { CheckboxControl } from '../FormControls/CheckboxControl';
 import { useMilestoneStatus } from '../../hooks';
+import { MilestoneTimelineContent } from './MilestoneTimelineContent';
 
 const useStyles = makeStyles({
+  missingOppositeContent: {
+    "&:before": {
+      flex: 0,
+      padding: 0
+    }
+  },
   due: {
     backgroundColor: 'rgb(235, 241, 254)',
     color: 'rgb(42, 122, 222)',
@@ -44,7 +49,7 @@ const useStyles = makeStyles({
 });
 
 export default function MilestoneTimeline(props) {
-  const { milestones, onCheck, nextMilestone } = props;
+  const { milestones, onCheck, nextMilestone, align } = props;
   const statusMilestones = useMilestoneStatus(milestones, nextMilestone);
   const classes = useStyles();
 
@@ -53,15 +58,10 @@ export default function MilestoneTimeline(props) {
   };
 
   return (
-    <Timeline align="alternate">
+    <Timeline align={align}>
       {statusMilestones &&
         statusMilestones.map((milestone, index) => (
-          <TimelineItem key={milestone._id}>
-            <TimelineOppositeContent>
-              <Typography variant="body2" color="textSecondary">
-                {new Date(milestone.date).toLocaleDateString()}
-              </Typography>
-            </TimelineOppositeContent>
+          <TimelineItem classes={{missingOppositeContent: classes.missingOppositeContent}} key={milestone._id}>
             <TimelineSeparator>
               {milestone.status === STATUS.NOT_DUE ? (
                 <TimelineDot>
@@ -83,33 +83,7 @@ export default function MilestoneTimeline(props) {
 
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>
-              <Paper elevation={3} style={{ padding: '10px 20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <CheckboxControl
-                    label="Done"
-                    value={milestone.notifiedFarmer}
-                    onChange={(e) => handleCheck(e.target.value, milestone._id)}
-                    disabled={!milestone.active}
-                  />
-                </div>
-                <List>
-                  {milestone.productApplications.map((application) => (
-                    <ListItem key={application._id}>
-                      <ListItemIcon>
-                        <ProductCategoryIcon
-                          category={application.product.category.name}
-                        />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={`${application.product.name}`}
-                        secondary={`${application.quantity} ${application.unit.name}`}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
-            </TimelineContent>
+            <MilestoneTimelineContent milestone={milestone} onChange={(e) => handleCheck(e.target.value, milestone._id)}/>
           </TimelineItem>
         ))}
     </Timeline>

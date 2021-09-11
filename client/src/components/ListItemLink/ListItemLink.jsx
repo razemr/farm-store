@@ -18,9 +18,9 @@ export default function ListItemLink(props) {
 
   return (
     <li>
-      <ListItem button component={renderLink}>
+      <ListItem button component={renderLink} color="">
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
-        <ListItemText primary={primary} />
+        <ListItemText primary={primary} primaryTypographyProps={{color: "textSecondary"}}/>
       </ListItem>
     </li>
   );

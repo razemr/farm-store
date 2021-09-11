@@ -7,6 +7,7 @@ import { ProgramDialog } from '../../components/ProgramDialog';
 import { useState, useContext, useEffect } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
 import { useStyles } from './useStyles';
+import { PageHeader } from '../../components/PageHeader';
 
 export default function ListPrograms() {
   const classes = useStyles();
@@ -35,8 +36,8 @@ export default function ListPrograms() {
   };
 
   return (
-    <Container>
-      <div className="header">
+    <>
+      {/* <div className="header">
         <h1>Programs</h1>
         <div className="header-actions">
           <Input
@@ -57,7 +58,8 @@ export default function ListPrograms() {
             Create
           </Button>
         </div>
-      </div>
+      </div> */}
+      <PageHeader title="Programs"></PageHeader>
       <ProgramTable
         onView={handleOnView}
         onEdit={handleOnEdit}
@@ -69,6 +71,6 @@ export default function ListPrograms() {
         onManual={handleOnManual}
         onTemplate={handleOnTemplate}
       />
-    </Container>
+    </>
   );
 }

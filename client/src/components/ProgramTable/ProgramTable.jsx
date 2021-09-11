@@ -1,23 +1,13 @@
 import './ProgramTable.css';
-import { DataGrid } from '@material-ui/data-grid';
 import { createColumns } from './columns';
+import TableWidget from '../TableWidget/TableWidget';
 
 export default function ProgramTable(props) {
   const { programs, onView, onEdit } = props;
   const columns = createColumns(onView, onEdit);
 
-  return (
-    <div className="grid-container">
-      <div style={{ flexGrow: 1 }}>
-        <DataGrid
-          rows={programs}
-          getRowId={(row) => row._id}
-          columns={columns}
-          pageSize={50}
-          disableSelectionOnClick
-          autoHeight
-        />
-      </div>
-    </div>
-  );
+  const getRowId = (row) => row._id;
+
+  return <TableWidget rows={programs} columns={columns} pageSize={10} getRowId={getRowId} disableSelectionOnClick={true}
+  autoHeight={true} title="List of Programs"/>;
 }

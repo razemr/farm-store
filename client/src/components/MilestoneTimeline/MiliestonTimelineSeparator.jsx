@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function ProgramDetails() {
+export const  MiliestonTimelineSeparator = () => {
     return (
         <div>
-            Details
+            
         </div>
     )
 }

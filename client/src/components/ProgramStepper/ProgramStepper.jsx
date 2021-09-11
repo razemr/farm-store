@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Input Option', 'Template Details', 'Additional Information'];
+  return ['Template Type', 'Template Details', 'Additional Information'];
 }
 
 const initialValues = {
@@ -131,7 +131,7 @@ export default function ProgramStepper(props) {
       <form className={classes.form}>
         {activeStep === 0 ? (
           <>
-            <h3>Input Option</h3>
+            {/* <h3>Input Option</h3> */}
             <RadioControl
               value={inputOption}
               onChange={(e) => setInputOption(e.target.value)}
@@ -143,7 +143,7 @@ export default function ProgramStepper(props) {
           </>
         ) : activeStep === 1 ? (
           <>
-            <h3>Template Details</h3>
+            {/* <h3>Template Details</h3> */}
             <SelectControl
               name="template"
               value={formik.values.template}
@@ -191,7 +191,7 @@ export default function ProgramStepper(props) {
           </>
         ) : (
           <>
-            <h3>Additional Information</h3>
+            {/* <h3>Additional Information</h3> */}
             <TextField
               label="Program Name"
               name="name"

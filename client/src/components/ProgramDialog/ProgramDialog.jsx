@@ -18,7 +18,7 @@ import {
   
     return (
       <Dialog open={open}>
-        <DialogTitle onClose={onClose} >Create Program</DialogTitle>
+        {/* <DialogTitle onClose={onClose} >Create Program</DialogTitle> */}
         <DialogContent className={classes.content}>
           <ProgramStepper onManual={onManual} onTemplate={onTemplate}></ProgramStepper>
         </DialogContent>

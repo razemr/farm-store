@@ -1,0 +1,25 @@
+.featured-wrapper {
+  position: relative;
+  padding: 16px;
+}
+
+.featured-icon-container {
+  position: absolute;
+  top: -20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px !important;
+  background: linear-gradient(60deg, #ef5350, #e53935);
+  box-shadow: 0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px rgb(244 67 54 / 40%) !important;
+}
+
+.featured-icon {
+  color: white;
+}
+
+.featured-footer {
+  width: 100%;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}

@@ -1,9 +1,14 @@
-import React from 'react'
+import "./PageHeader.css";
+import { Typography } from "@material-ui/core";
 
-export default function PageHeader() {
+export default function PageHeader(props) {
+    const {title} = props;
     return (
-        <Typography>
-            
-        </Typography>
+        <div className="page-header">
+            <Typography variant="h6" component="h1" color="textSecondary">
+                {title}
+            </Typography>
+        </div>
+        
     )
 }

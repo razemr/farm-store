@@ -17,7 +17,7 @@ export const createColumns = (onView, onEdit) => [
     flex: 2,
     renderCell: (params) => {
       return (
-        <div className="crop-name">
+        <div className="program-name">
           <img
             src={`${process.env.PUBLIC_URL}/images/${params.row.crop.name}.jpg`}
             className="crop-image"
