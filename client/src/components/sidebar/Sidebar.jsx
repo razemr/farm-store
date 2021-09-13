@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   listItemSelected: {
     backgroundColor: `${theme.palette.primary.main} !important`,
+    boxShadow: theme.customShadows.primary,
     color: "#fff !important"
   }
 }));
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Sidebar() {
   const classes = useStyles();
   const location = useLocation();
-  
+
   return (
     <Drawer
       variant="permanent"
@@ -56,7 +57,7 @@ export default function Sidebar() {
         {navigationMenu.map((menu) => 
           <ListItemLink
             key={menu.title}
-            selected={location.pathname === menu.to}
+            selected={location.pathname.split('/')[1] === menu.to.split('/')[1]}
             classes={{ root: classes.listItemRoot, selected: classes.listItemSelected }}
             to={menu.to}
             primary={menu.title}

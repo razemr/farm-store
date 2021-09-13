@@ -3,8 +3,9 @@ import { GlobalContext } from '../../context/GlobalState';
 import { useParams } from 'react-router-dom';
 import { ProgramDetailsWidget } from '../../components/ProgramDetailsWidget';
 import { MilestoneTimeline } from '../../components/MilestoneTimeline';
-import { Grid, Paper } from '@material-ui/core';
+import { Grid, Paper, IconButton } from '@material-ui/core';
 import { PageHeader } from '../../components/PageHeader';
+import { Edit } from '@material-ui/icons';
 
 export default function ViewProgram() {
   const { getItem, program, patchItem } = useContext(GlobalContext);
@@ -24,12 +25,14 @@ export default function ViewProgram() {
 
   return (
     <>
-      <PageHeader title="Program Detail"></PageHeader>
+      <PageHeader title="Program Detail">
+        <IconButton>
+          <Edit color="action" fontSize="small" />
+        </IconButton>
+      </PageHeader>
       <Grid container spacing={4}>
         <Grid item xs={6}>
-          <Paper>
-            <ProgramDetailsWidget program={program} />
-          </Paper>
+          <ProgramDetailsWidget program={program} />
         </Grid>
         <Grid item xs={6}>
           <MilestoneTimeline

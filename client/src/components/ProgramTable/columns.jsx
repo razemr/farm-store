@@ -1,5 +1,5 @@
-import { IconButton } from '@material-ui/core';
-import { Edit, Search, PriorityHigh, Close } from '@material-ui/icons';
+import { IconButton, Typography } from '@material-ui/core';
+import { Edit, PriorityHigh, Close, Description } from '@material-ui/icons';
 import { compareDates } from '../../utils/compareDates';
 
 const columnDefaults = {
@@ -17,14 +17,15 @@ export const createColumns = (onView, onEdit) => [
     flex: 2,
     renderCell: (params) => {
       return (
-        <div className="program-name">
-          <img
-            src={`${process.env.PUBLIC_URL}/images/${params.row.crop.name}.jpg`}
-            className="crop-image"
-            alt="user"
-          ></img>
-          <span>{params.row.name}</span>
-        </div>
+        <Typography variant="body1">{params.row.name}</Typography>
+        // <div className="program-name">
+        //   <img
+        //     src={`${process.env.PUBLIC_URL}/images/${params.row.crop.name}.jpg`}
+        //     className="crop-image"
+        //     alt="user"
+        //   ></img>
+        //   <Typography variant="body1">{params.row.name}</Typography>
+        // </div>
       );
     },
   },
@@ -41,8 +42,8 @@ export const createColumns = (onView, onEdit) => [
 
       return (
         <div className="next-milestone">
-          <div>{date.toLocaleDateString()}</div>
-          {status < 0 && <PriorityHigh color="error" fontSize="small" />}
+          <Typography variant="body1">{date.toLocaleDateString()} {status < 0 && <PriorityHigh color="error" fontSize="small" />}</Typography>
+          
         </div>
       );
     },
@@ -55,9 +56,9 @@ export const createColumns = (onView, onEdit) => [
     flex: 1,
     renderCell: (params) => {
       return (
-        <>
+        <Typography variant="body1">
           {params.row.farmer.firstName} {params.row.farmer.lastName}
-        </>
+        </Typography>
       );
     },
   },
@@ -67,20 +68,20 @@ export const createColumns = (onView, onEdit) => [
     headerName: 'Crop',
     flex: 1,
     renderCell: (params) => {
-      return params.row.crop.name;
+      return <Typography variant="body1">{params.row.crop.name}</Typography>;
     },
   },
   {
     ...columnDefaults,
     sortable: false,
     field: 'action',
-    headerName: 'Actions',
+    headerName: ' ',
     flex: 1,
     renderCell: (params) => {
       return (
         <div>
           <IconButton onClick={(e) => onView(params.row._id)}>
-            <Search color="primary" fontSize="small"/>
+            <Description color="primary" fontSize="small"/>
           </IconButton>
           <IconButton>
             <Edit color="action" fontSize="small" />

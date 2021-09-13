@@ -12,12 +12,16 @@
     transform: translate(-50%, 0);
     top: -60px;
     border-radius: 50%;
-    box-shadow: 0 16px 38px -12px rgb(0 0 0 / 56%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+    box-shadow: 0 16px 38px -12px #6d1b7b56, 0 4px 25px 0 #6d1b7b12, 0 8px 10px -5px #6d1b7b20;
 }
 
 .crop-name {
-    margin-bottom: 16px;
+    margin-top: 32px !important;
     text-transform: uppercase;
+}
+
+.program-description {
+    margin-top: 16px !important; 
 }
 
 .property-grid {
@@ -33,9 +37,8 @@
 
 .property-wrapper {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
 .property-title {

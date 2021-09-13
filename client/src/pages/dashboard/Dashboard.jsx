@@ -2,7 +2,7 @@ import './Dashboard.css';
 import { FeatureWidget } from '../../components/FeatureWidget';
 import { PageHeader } from '../../components/PageHeader';
 import { Grid } from '@material-ui/core';
-import { Assignment } from '@material-ui/icons';
+import { Assignment, PeopleAlt, Storefront, Timeline } from '@material-ui/icons';
 
 export default function Dashboard() {
   return (
@@ -13,13 +13,13 @@ export default function Dashboard() {
           <FeatureWidget icon={<Assignment/>} title="Programs" footer="Updated 20 minutes ago" value="13" color="success"/>
         </Grid>
         <Grid item md={3}>
-          <FeatureWidget />
+          <FeatureWidget icon={<Timeline/>} title="Milestones" footer="Update 15 minutes ago" value="20" color="info" />
         </Grid>
         <Grid item md={3}>
-          <FeatureWidget />
+          <FeatureWidget icon={<PeopleAlt/>} title="Farmers" footer="Update 15 minutes ago" value="20" color="warning" />
         </Grid>
         <Grid item md={3}>
-          <FeatureWidget />
+        <FeatureWidget icon={<Storefront/>} title="Products" footer="Update 15 minutes ago" value="20" color="error" />
         </Grid>
       </Grid>
 

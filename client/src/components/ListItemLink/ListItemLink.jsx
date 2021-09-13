@@ -4,11 +4,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Link as RouterLink } from 'react-router-dom';
+import './ListItemLink.css';
 
 export default function ListItemLink(props) {
-  const { icon, primary, to, ...other } = props;
+  const { icon, primary, to, selected, ...other } = props;
 
-  const disabledIcon = React.isValidElement(icon) ? React.cloneElement(icon, {color: "disabled"}) : '';
+  const disabledIcon = React.isValidElement(icon) ? React.cloneElement(icon, {color: "disabled", className : selected && 'path-selected-icon'}) : '';
 
   const renderLink = React.useMemo(
     () =>
@@ -19,7 +20,7 @@ export default function ListItemLink(props) {
   );
 
   return (
-    <ListItem {...other} component={renderLink} color="">
+    <ListItem selected={selected} {...other} component={renderLink} color="">
       {icon ? <ListItemIcon>{disabledIcon}</ListItemIcon> : null}
       <ListItemText
         primary={primary}

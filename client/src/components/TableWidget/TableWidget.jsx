@@ -3,27 +3,45 @@ import { Paper, Typography } from '@material-ui/core';
 import './TableWidget.css';
 import { makeStyles } from '@material-ui/styles';
 
-const useStyles = makeStyles({
+const useStyles = (props) => makeStyles((theme) => ({
   root: {
-    '&.MuiDataGrid-root': {
-      border: 'none',
-      borderRadius: 'none',
-      '&:focus': { outline: 'none' },
+    border: 'none',
+    borderRadius: 'none',
+    '& .MuiDataGrid-columnHeaderTitle': {
+      fontWeight: theme.typography.h6.fontWeight,
+      fontSize: theme.typography.h6.fontSize,
+      color: `${theme.palette[props.color]} !important`,
     },
+    '& .MuiDataGrid-iconSeparator': {
+      display: 'none !important',
+    },
+    '& .MuiDataGrid-footerContainer': {
+      color: `${theme.palette[props.color]} !important`,
+      '& .MuiTablePagination-root': {
+        color: `${theme.palette[props.color]} !important`,
+      },
+    },
+  },
+  columnHeader: {
+    outline: 'none !important',
   },
   cell: {
-    '&.MuiDataGrid-columnSeparator': {
-      display: 'none',
-    },
+    outline: 'none !important',
   },
-});
+  paperRoot: {
+    background: theme.customBackgrounds[`${props.color}`],
+    boxShadow: theme.customShadows[`${props.color}`],
+    color: 'white !important'
+  }
+}));
 
 export default function TableWidget(props) {
-  const classes = useStyles();
-  const { rows, columns, getRowId, pageSize, title, ...other } = props;
+  const { rows, columns, getRowId, pageSize, title, onRowClick, color, ...other } =
+    props;
+    const classes = useStyles({color})();
   return (
-    <Paper elevation={10} className="table-wrapper">
-      <Paper className="table-header">
+    <Paper elevation={1} className="table-wrapper">
+      <Paper classes={{root: classes.paperRoot}} className="table-header">
         <Typography align="right" variant="h2">
           {title}
         </Typography>
@@ -32,11 +50,16 @@ export default function TableWidget(props) {
         </Typography>
       </Paper>
       <DataGrid
-        classes={{ root: classes.root, cell: classes.cell }}
+        classes={{
+          root: classes.root,
+          columnHeader: classes.columnHeader,
+          cell: classes.cell,
+        }}
         rows={rows}
         getRowId={getRowId}
         columns={columns}
         pageSize={pageSize}
+        onRowClick={onRowClick}
         {...other}
       />
     </Paper>

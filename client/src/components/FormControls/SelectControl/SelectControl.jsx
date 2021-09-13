@@ -7,9 +7,9 @@ import {
 } from "@material-ui/core";
 
 export default function SelectControl(props) {
-  const { name, label, value, onChange, options, error, helperText } = props;
+  const { name, label, value, onChange, options, error, helperText, ...other} = props;
   return (
-    <FormControl error={error}>
+    <FormControl error={error} {...other}>
       <InputLabel>{label}</InputLabel>
       <Select name={name} value={value} onChange={onChange}>
         <MenuItem value=""></MenuItem>

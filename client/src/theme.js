@@ -31,13 +31,20 @@ const palette = {
     main: '#4caf50',
     dark: '#388e3c',
   },
-
+  inactive: {
+    light: '#e0e0e0',
+    main: '#bdbdbd',
+    dark: '#9e9e9e'
+  },
   background: {
     paper: '#fff',
     default: '#eee',
     level2: '#f5f5f5',
-    level1: '#fff'
-  }
+    level1: '#fff',
+  },
+  text: {
+    disabled: '#a9afbb',
+  },
 };
 const fontFamily = 'Roboto,Helvetica,Arial,sans-serif';
 const boxShadowBase = '0 4px 20px 0 rgb(0 0 0 / 14%), 0 7px 10px -5px';
@@ -111,6 +118,7 @@ export const theme = createTheme({
     error: `${boxShadowBase} ${palette.error.dark}40`,
     warning: `${boxShadowBase} ${palette.warning.dark}40`,
     success: `${boxShadowBase} ${palette.success.dark}40`,
+    inactive: `${boxShadowBase} ${palette.inactive.dark}40`,
   },
   customBackgrounds: {
     primary: `linear-gradient(60deg, ${palette.primary.light}, ${palette.primary.dark});`,
@@ -119,5 +127,6 @@ export const theme = createTheme({
     error: `linear-gradient(60deg, ${palette.error.light}, ${palette.error.dark});`,
     warning: `linear-gradient(60deg, ${palette.warning.light}, ${palette.warning.dark});`,
     success: `linear-gradient(60deg, ${palette.success.light}, ${palette.success.dark});`,
-  }
+    inactive: `linear-gradient(60deg, ${palette.inactive.light}, ${palette.inactive.dark});`,
+  },
 });

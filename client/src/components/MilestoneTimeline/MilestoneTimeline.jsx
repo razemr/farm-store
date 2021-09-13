@@ -4,17 +4,8 @@ import {
   TimelineSeparator,
   TimelineDot,
   TimelineConnector,
-  TimelineContent,
 } from '@material-ui/lab';
-import {
-  Typography,
-  Paper,
-  makeStyles,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import {
   MoreHoriz,
   Error,
@@ -22,17 +13,16 @@ import {
   RemoveCircle,
 } from '@material-ui/icons';
 import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
-import { ProductCategoryIcon } from '../ProductCategoryIcon';
-import { CheckboxControl } from '../FormControls/CheckboxControl';
 import { useMilestoneStatus } from '../../hooks';
 import { MilestoneTimelineContent } from './MilestoneTimelineContent';
+import { MiliestonTimelineSeparator } from './MiliestonTimelineSeparator';
 
 const useStyles = makeStyles({
   missingOppositeContent: {
-    "&:before": {
+    '&:before': {
       flex: 0,
-      padding: 0
-    }
+      padding: 0,
+    },
   },
   due: {
     backgroundColor: 'rgb(235, 241, 254)',
@@ -61,29 +51,15 @@ export default function MilestoneTimeline(props) {
     <Timeline align={align}>
       {statusMilestones &&
         statusMilestones.map((milestone, index) => (
-          <TimelineItem classes={{missingOppositeContent: classes.missingOppositeContent}} key={milestone._id}>
-            <TimelineSeparator>
-              {milestone.status === STATUS.NOT_DUE ? (
-                <TimelineDot>
-                  <MoreHoriz />
-                </TimelineDot>
-              ) : milestone.status === STATUS.OVERDUE ? (
-                <TimelineDot classes={{ defaultGrey: classes.overdue }}>
-                  <Error />
-                </TimelineDot>
-              ) : milestone.status === STATUS.COMPLETE ? (
-                <TimelineDot classes={{ defaultGrey: classes.complete }}>
-                  <CheckCircle />
-                </TimelineDot>
-              ) : (
-                <TimelineDot classes={{ defaultGrey: classes.due }}>
-                  <RemoveCircle />
-                </TimelineDot>
-              )}
-
-              <TimelineConnector />
-            </TimelineSeparator>
-            <MilestoneTimelineContent milestone={milestone} onChange={(e) => handleCheck(e.target.value, milestone._id)}/>
+          <TimelineItem
+            classes={{ missingOppositeContent: classes.missingOppositeContent }}
+            key={milestone._id}
+          >
+            <MiliestonTimelineSeparator status={milestone.status} />
+            <MilestoneTimelineContent
+              milestone={milestone}
+              onChange={(e) => handleCheck(e.target.value, milestone._id)}
+            />
           </TimelineItem>
         ))}
     </Timeline>

@@ -1,0 +1,30 @@
+.card {
+  position: relative;
+  padding: 20px;
+}
+
+.card-header {
+    min-height: 46px;
+}
+
+.clear { clear: both; }
+
+.card-label {
+  position: relative;
+  top: -32px;
+  z-index: 3 !important;
+  padding: 20px !important;
+  margin-right: 16px;
+  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white !important;
+}
+
+.card-footer {
+    width: 100%;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  margin-top: 16px !important;
+}

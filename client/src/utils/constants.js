@@ -2,7 +2,7 @@ export const MILESTONE_STATUS = {
   OVERDUE: 'Overdue',
   DUE: 'Due',
   NOT_DUE: 'Not due',
-  COMPLETE: 'Complete',
+  COMPLETE: 'Completed',
 };
 
 export const SECOND = 1000;

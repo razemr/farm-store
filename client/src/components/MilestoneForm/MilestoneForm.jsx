@@ -3,11 +3,14 @@ import { Grid, IconButton } from '@material-ui/core';
 import { DatePickerControl } from '../FormControls/DatePickerControl';
 import { ProductRow } from '../ProductRow';
 import { FieldArray } from 'formik';
-import { Close, Add } from '@material-ui/icons';
+import { Close, Add, Timeline } from '@material-ui/icons';
 import { useStyles } from './useStyles';
+import { Card } from '../Card';
 
 export default function MilestoneForm(props) {
   const {
+    index,
+    actions,
     date,
     productApplications,
     onChange,
@@ -21,7 +24,13 @@ export default function MilestoneForm(props) {
   const classes = useStyles();
 
   return (
-    <div className="form-container">
+    <Card
+      header={`Milestone ${index + 1}`}
+      style={{ marginTop: '32px' }}
+      label={<Timeline fontSize="large" />}
+      color="primary"
+      actions={actions}
+    >
       <Grid container>
         <Grid item xs={4}>
           <DatePickerControl
@@ -86,6 +95,6 @@ export default function MilestoneForm(props) {
           </div>
         )}
       />
-    </div>
+    </Card>
   );
 }
