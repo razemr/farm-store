@@ -1,23 +1,18 @@
-import {
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineDot,
-  TimelineConnector,
-} from '@material-ui/lab';
+import { Timeline, TimelineItem } from '@material-ui/lab';
 import { makeStyles } from '@material-ui/core';
-import {
-  MoreHoriz,
-  Error,
-  CheckCircle,
-  RemoveCircle,
-} from '@material-ui/icons';
-import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
 import { useMilestoneStatus } from '../../hooks';
 import { MilestoneTimelineContent } from './MilestoneTimelineContent';
 import { MiliestonTimelineSeparator } from './MiliestonTimelineSeparator';
+import { GlobalContext } from '../../context/GlobalState';
+import { useContext } from 'react';
+import {CheckboxControl} from '../FormControls/CheckboxControl';
 
 const useStyles = makeStyles({
+  controlRoot: {
+      '& .MuiButtonBase-root': {
+        padding: '0 !important'
+    }
+  },
   missingOppositeContent: {
     '&:before': {
       flex: 0,
@@ -39,8 +34,13 @@ const useStyles = makeStyles({
 });
 
 export default function MilestoneTimeline(props) {
-  const { milestones, onCheck, nextMilestone, align } = props;
-  const statusMilestones = useMilestoneStatus(milestones, nextMilestone);
+  const { program } = useContext(GlobalContext);
+  const { onCheck, align } = props;
+  const statusMilestones = useMilestoneStatus(
+    program.milestones,
+    program.nextMilestone,
+  );
+
   const classes = useStyles();
 
   const handleCheck = (status, id) => {
@@ -52,13 +52,22 @@ export default function MilestoneTimeline(props) {
       {statusMilestones &&
         statusMilestones.map((milestone, index) => (
           <TimelineItem
-            classes={{ missingOppositeContent: classes.missingOppositeContent }}
+            // classes={{ missingOppositeContent: classes.missingOppositeContent }}
             key={milestone._id}
           >
             <MiliestonTimelineSeparator status={milestone.status} />
             <MilestoneTimelineContent
               milestone={milestone}
-              onChange={(e) => handleCheck(e.target.value, milestone._id)}
+              actions={
+                <div>
+                  <CheckboxControl classes={{root: classes.controlRoot}}
+                    label="Mark as complete"
+                    value={milestone.notifiedFarmer}
+                    onChange={(e) => handleCheck(e.target.value, milestone._id)}
+                    disabled={!milestone.active}
+                  />
+                </div>
+              }
             />
           </TimelineItem>
         ))}

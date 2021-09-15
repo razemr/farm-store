@@ -9,7 +9,7 @@ import './ListItemLink.css';
 export default function ListItemLink(props) {
   const { icon, primary, to, selected, ...other } = props;
 
-  const disabledIcon = React.isValidElement(icon) ? React.cloneElement(icon, {color: "disabled", className : selected && 'path-selected-icon'}) : '';
+  const disabledIcon = React.isValidElement(icon) ? React.cloneElement(icon, {color: "disabled", className : selected? 'path-selected-icon': ''}) : '';
 
   const renderLink = React.useMemo(
     () =>
@@ -24,7 +24,7 @@ export default function ListItemLink(props) {
       {icon ? <ListItemIcon>{disabledIcon}</ListItemIcon> : null}
       <ListItemText
         primary={primary}
-        primaryTypographyProps={{ variant: 'h3' }}
+        primaryTypographyProps={{ variant: 'body1' }}
       />
     </ListItem>
   );

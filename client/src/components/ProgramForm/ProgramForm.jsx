@@ -1,10 +1,4 @@
-import {
-  Grid,
-  TextField,
-  Button,
-  IconButton,
-  InputAdornment,
-} from '@material-ui/core';
+import { Grid, TextField, Button, IconButton } from '@material-ui/core';
 import { Delete, Assignment } from '@material-ui/icons';
 import { Formik, FieldArray } from 'formik';
 import { SelectControl } from '../FormControls/SelectControl';
@@ -13,6 +7,8 @@ import { MilestoneForm } from '../MilestoneForm';
 import { validationSchema } from './validationSchema';
 import { Card } from '../Card';
 import { makeStyles } from '@material-ui/core';
+import { useContext } from 'react';
+import { GlobalContext } from '../../context/GlobalState';
 
 const useStyles = makeStyles({
   form: {
@@ -33,13 +29,15 @@ const useStyles = makeStyles({
 });
 
 export default function ProgramForm(props) {
-  const { program, onSubmit, farmers, crops, units, products } = props;
+  const { onSubmit, program } = props;
   const classes = useStyles();
-
+  const { farmers, crops } = useContext(GlobalContext);
+  
   return (
     <>
       {program && (
         <Formik
+          enableReinitialize={true}
           initialValues={program}
           validationSchema={validationSchema}
           onSubmit={(values) => {
@@ -146,7 +144,7 @@ export default function ProgramForm(props) {
                 name="milestones"
                 render={(arrayHelpers) => (
                   <div>
-                    {values.milestones.length > 0 &&
+                    {(values.milestones && values.milestones.length) > 0 &&
                       values.milestones.map((m, index) => (
                         <MilestoneForm
                           key={index}
@@ -161,8 +159,6 @@ export default function ProgramForm(props) {
                               </IconButton>
                             )
                           }
-                          units={units}
-                          products={products}
                           productApplications={
                             values.milestones[index].productApplications
                           }

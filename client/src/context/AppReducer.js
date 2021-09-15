@@ -22,6 +22,11 @@ const variable = (state, action) => {
     case ACTIONS.multiple:
       state[resources] = action.payload[resources];
       return { ...state };
+    case ACTIONS.delete:
+      state[resources] = state[resources].filter(
+        (r) => r._id != action.payload,
+      );
+      return { ...state };
     default:
       return { ...state };
   }

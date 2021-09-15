@@ -45,7 +45,7 @@ export default function Sidebar() {
     >
       <Typography
         classes={{ root: classes.typographyRoot }}
-        variant="h1"
+        variant="h4"
         align="center"
       >
         FARM STORE ADMIN

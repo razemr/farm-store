@@ -1,33 +1,50 @@
 import {
     Dialog as MuiDialog,
-    DialogContent as MuiDialogContent,
-    DialogTitle as MuiDialogTitle,
+    DialogContent,
+    Typography,
     Paper
-  } from "@material-ui/core";
-  import { makeStyles } from "@material-ui/core";
-
-  const useStyles = (props) => makeStyles((theme) => ({
-    paperRoot: {
+  } from '@material-ui/core';
+  import { makeStyles } from '@material-ui/core';
+  import './Dialog.css';
+  
+  const useStyles = (props) =>
+    makeStyles((theme) => ({
+      paperRoot: {
         background: theme.customBackgrounds[`${props.color}`],
         boxShadow: theme.customShadows[`${props.color}`],
-    }
-  }));
+      },
+      dialogRoot: {
+        overflowY: 'visible',
+      },
+      dialogPaper: {
+        overflowY: 'visible',
+      },
+      dialogContentRoot: {
+        overflowY: 'visible',
+      },
+    }));
+
 
 export default function Dialog(props) {
-    const {color} = props;
-    const classes = useStyles({color});
+  const { title, content, actions, color, open } = props;
+  const classes = useStyles({ color: color || 'primary' })();
   return (
-    <MuiDialog>
-      <MuiDialogTitle>
-      <Paper>
-
-</Paper>
-      </MuiDialogTitle>
-      <MuiDialogContent>
-        <Paper>
-
+    <MuiDialog
+      open={open}
+      classes={{ root: classes.dialogRoot, paper: classes.dialogPaper }}
+    >
+      <DialogContent
+        classes={{ root: classes.dialogContentRoot }}
+        className="dialog-content"
+      >
+        <Paper classes={{ root: classes.paperRoot }} className="dialog-header">
+          <Typography variant="h4">{title}</Typography>
         </Paper>
-      </MuiDialogContent>
+
+        <div>{content}</div>
+
+        <div className="dialog-actions">{actions}</div>
+      </DialogContent>
     </MuiDialog>
   );
 }

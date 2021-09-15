@@ -32,12 +32,14 @@ export default function Card(props) {
       elevation={elevation && 0}
       classes={{ root: classes.cardRoot }}
     >
-      <div className="card-header">
+      <div className="card-header-wrapper">
         <Paper className="card-label" classes={{ root: classes.labelRoot }}>
           {label}
         </Paper>
-        <Typography variant="h2">{header}</Typography>
-        <Typography variant="subtitle1">{subtitle}</Typography>
+        <div className="card-header">
+          <Typography variant="h4" color="textSecondary">{header}</Typography>
+          <Typography variant="subtitle1" color="textSecondary">{subtitle}</Typography>
+        </div>
         <div className="card-actions">
           {actions}
         </div>

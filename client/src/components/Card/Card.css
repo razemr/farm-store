@@ -3,8 +3,16 @@
   padding: 20px;
 }
 
-.card-header {
+.card-header-wrapper {
     min-height: 46px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.card-header {
+  text-align: left;
+  flex: 1;
 }
 
 .clear { clear: both; }

@@ -5,6 +5,7 @@ import { ViewProgram } from './pages/ViewProgram';
 import { CreateProgram } from './pages/CreateProgram';
 import { ListPrograms } from './pages/ListPrograms';
 import { ListMilestones } from './pages/ListMilestones';
+import { EditProgram } from './pages/EditProgram';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalState';
@@ -29,7 +30,8 @@ function App() {
                     exact
                     component={CreateProgram}
                   />
-                  <Route path="/programs/:id" component={ViewProgram} />
+                  <Route path="/programs/:id" exact component={ViewProgram} />
+                  <Route path="/programs/:id/edit" component={EditProgram} />
                 </Switch>
               </Route>
               <Route path="/milestones" exact component={ListMilestones} />

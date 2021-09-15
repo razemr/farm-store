@@ -54,37 +54,47 @@ export const theme = createTheme({
     h1: {
       fontFamily,
       fontWeight: '300',
-      fontSize: '1.125rem',
-      lineHeight: '30px',
+      fontSize: '3em',
+      lineHeight: '1.15em',
     },
     h2: {
       fontFamily,
       fontWeight: '300',
-      fontSize: '1.125rem',
-      lineHeight: '1.4em',
+      fontSize: '2.6em',
+      lineHeight: '1.5em',
     },
     h3: {
       fontFamily,
       fontWeight: '300',
-      lineHeight: '30px',
-      fontSize: '14px',
+      fontSize: '1.825em',
+      lineHeight: '1.4em',
+      
     },
     h4: {
       fontFamily,
       fontWeight: '300',
+      fontSize: '1.3em',
       lineHeight: '1.4em',
-      fontSize: '1.5625rem',
+      
     },
     h5: {
       fontFamily,
-      fontWeight: '500',
-      fontSize: '.75rem',
-      textTransform: 'uppercase;',
+      fontWeight: '300',
+      fontSize: '1.25em',
+      lineHeight: '1.4em'
     },
     h6: {
       fontFamily,
+      fontWeight: '500',
+      fontSize: '.8em',
+      lineHeight: '1.5em',
+      textTransform: 'uppercase;',
+    },
+    paragraph: {
+      fontFamily,
       fontWeight: '300',
-      fontSize: '1.063rem',
+      fontSize: '.875rem',
+      lineHeight: '1.5em',
     },
     subtitle1: {
       fontFamily,

@@ -1,5 +1,5 @@
 import { IconButton, Typography } from '@material-ui/core';
-import { Edit, PriorityHigh, Close, Description } from '@material-ui/icons';
+import { Edit, PriorityHigh, Close, Visibility } from '@material-ui/icons';
 import { compareDates } from '../../utils/compareDates';
 
 const columnDefaults = {
@@ -9,7 +9,7 @@ const columnDefaults = {
   resizeable: false,
 };
 
-export const createColumns = (onView, onEdit) => [
+export const createColumns = (onView, onEdit, onDelete) => [
   {
     ...columnDefaults,
     field: 'name',
@@ -81,12 +81,12 @@ export const createColumns = (onView, onEdit) => [
       return (
         <div>
           <IconButton onClick={(e) => onView(params.row._id)}>
-            <Description color="primary" fontSize="small"/>
+            <Visibility color="primary" fontSize="small"/>
           </IconButton>
-          <IconButton>
+          <IconButton onClick={(e) => onEdit(params.row._id)}>
             <Edit color="action" fontSize="small" />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={(e) => onDelete(params.row)}>
             <Close color="error" fontSize="small" />
           </IconButton>
         </div>

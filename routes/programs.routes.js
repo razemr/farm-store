@@ -12,7 +12,7 @@ const {
 router
   .route('/:id')
   .get(getProgram)
-  .put(editProgram)
+  .put(editProgram, getProgram)
   .delete(deleteProgram)
   .patch(updateMilestoneStatus, getProgram);
 

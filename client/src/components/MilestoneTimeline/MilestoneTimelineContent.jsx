@@ -12,10 +12,11 @@ import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
 import { Typography } from '@material-ui/core';
 
 export const MilestoneTimelineContent = (props) => {
-  const { milestone, onChange } = props;
+  const { milestone, actions, onChange } = props;
   return (
     <TimelineContent className="content-wrapper">
       <Card
+        actions={actions}
         color={
           milestone.status === STATUS.NOT_DUE
             ? 'inactive'
@@ -42,18 +43,44 @@ export const MilestoneTimelineContent = (props) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Product</TableCell>
-              <TableCell align="right">Quantity</TableCell>
-              <TableCell align="right">Unit</TableCell>
+              <TableCell>
+                <Typography variant="h5">Product</Typography>
+              </TableCell>
+              <TableCell>
+                <Typography variant="h5">Type</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="h5">Quantity</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="h5">Unit</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {milestone.productApplications &&
               milestone.productApplications.map((application, index) => (
                 <TableRow key={index}>
-                  <TableCell>{application.product.name}</TableCell>
-                  <TableCell align="right">{application.quantity} </TableCell>
-                  <TableCell align="right">{application.unit.name}</TableCell>
+                  <TableCell>
+                    <Typography variant="body1">
+                      {application.product.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body1">
+                      {application.product.category.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">
+                      {application.quantity}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="body1">
+                      {application.unit.name}
+                    </Typography>
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

@@ -6,8 +6,11 @@ import { FieldArray } from 'formik';
 import { Close, Add, Timeline } from '@material-ui/icons';
 import { useStyles } from './useStyles';
 import { Card } from '../Card';
+import { useContext } from 'react';
+import { GlobalContext } from '../../context/GlobalState';
 
 export default function MilestoneForm(props) {
+  const { units, products } = useContext(GlobalContext);
   const {
     index,
     actions,
@@ -18,8 +21,6 @@ export default function MilestoneForm(props) {
     name,
     errors,
     touched,
-    units,
-    products,
   } = props;
   const classes = useStyles();
 

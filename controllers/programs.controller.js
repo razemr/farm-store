@@ -55,6 +55,73 @@ exports.addProgram = async (req, res, next) => {
   }
 };
 
+exports.editProgram = async (req, res, next) => {
+  try {
+    const {
+      endDate,
+      name,
+      startDate,
+      acres,
+      crop,
+      farmer,
+      template,
+      milestones,
+    } = req.body;
+
+    await Program.findByIdAndUpdate(req.params.id, {
+      crop,
+      farmer,
+      template,
+      endDate,
+      name,
+      startDate,
+      acres,
+    });
+
+    let program = await Program.findById(req.params.id);
+
+    if (program.farmer != farmer) {
+      await Farmer.findByIdAndUpdate(program.farmer, {
+        $pull: { programs: program._id },
+      });
+      await Farmer.findByIdAndUpdate(farmer, {
+        $push: { programs: program._id },
+      });
+    }
+
+    let milestoneIds = milestones
+      .filter((m) => Boolean(m._id))
+      .map((m) => m._id);
+
+    for (let i = 0; i < program.milestones.length; i++) {
+      if (milestoneIds.indexOf(program.milestones[i].toString()) < 0) {
+        await Program.findByIdAndUpdate(program._id, {
+          $pull: { milestones: program.milestones[i] },
+        });
+      }
+    }
+
+    for (let i = 0; i < milestones.length; i++) {
+      let { _id, date, productApplications } = milestones[i];
+      if (_id) {
+        await Milestone.findByIdAndUpdate(_id, { date, productApplications });
+      } else {
+        const milestone = await Milestone.create({ date, productApplications });
+        await Program.findByIdAndUpdate(req.params.id, {
+          $push: { milestones: milestone._id },
+        });
+      }
+    }
+    const nextMilestone = await getNextMilestone(req.params.id);
+    await Program.findByIdAndUpdate(req.params.id, { nextMilestone });
+
+    next();
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+};
+
 exports.listPrograms = async (req, res, next) => {
   try {
     const { q, _limit, _page, _sort } = req.query;
@@ -112,17 +179,6 @@ exports.getProgram = async (req, res, next) => {
   }
 };
 
-exports.editProgram = async (req, res, next) => {
-  try {
-    delete req.body._id;
-    const program = await Program.findByIdAndUpdate(req.params.id, req.body);
-
-    res.status(200).json(program);
-  } catch (error) {
-    next(error);
-  }
-};
-
 exports.updateMilestoneStatus = async (req, res, next) => {
   try {
     await Milestone.findByIdAndUpdate(req.body.id, {
@@ -134,21 +190,7 @@ exports.updateMilestoneStatus = async (req, res, next) => {
       'date notifiedFarmer',
     );
 
-    let nextMilestone = program.nextMilestone;
-
-    const filteredMilestones = program.milestones.filter(
-      (milestone) => !milestone.notifiedFarmer,
-    );
-
-    if (filteredMilestones.length === 0) {
-      nextMilestone = program.milestones.reduce((a, b) => {
-        return new Date(a.date).getTime() > new Date(b.date).getTime() ? a : b;
-      }, program.milestones[0]).date;
-    } else {
-      nextMilestone = filteredMilestones.reduce((a, b) => {
-        return new Date(a.date).getTime() < new Date(b.date).getTime() ? a : b;
-      }, filteredMilestones[0]).date;
-    }
+    const nextMilestone = await getNextMilestone(program);
 
     await Program.findByIdAndUpdate(req.params.id, { nextMilestone });
     next();
@@ -163,12 +205,40 @@ exports.updateMilestoneStatus = async (req, res, next) => {
 exports.deleteProgram = async (req, res, next) => {
   try {
     const program = await Program.findByIdAndDelete(req.params.id);
+
     await Farmer.findByIdAndUpdate(program.farmer, {
       $pull: { programs: program._id },
     });
 
-    res.status(200).send('success');
+    await Milestone.remove({program: program._id});
+
+    res.status(200).send({program});
   } catch (error) {
+    console.log(error)
     next(error);
   }
+};
+
+const getNextMilestone = async (id) => {
+  program = await Program.findById(id).populate(
+    'milestones',
+    'date notifiedFarmer',
+  );
+  let nextMilestone = program.nextMilestone;
+
+  const filteredMilestones = program.milestones.filter(
+    (milestone) => !milestone.notifiedFarmer,
+  );
+
+  if (filteredMilestones.length === 0) {
+    nextMilestone = program.milestones.reduce((a, b) => {
+      return new Date(a.date).getTime() > new Date(b.date).getTime() ? a : b;
+    }, program.milestones[0]).date;
+  } else {
+    nextMilestone = filteredMilestones.reduce((a, b) => {
+      return new Date(a.date).getTime() < new Date(b.date).getTime() ? a : b;
+    }, filteredMilestones[0]).date;
+  }
+
+  return nextMilestone;
 };

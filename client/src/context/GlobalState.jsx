@@ -96,6 +96,21 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const editItem = async (route, id, data) => {
+    try {
+      const result = await httpClient.put(`${route}/${id}`, data);
+      dispatch({
+        type: {
+          name: ACTIONS.single,
+          route,
+        },
+        payload: result.data,
+      });
+    } catch (error) {
+      dispatchError(error);
+    }
+  };
+
   const patchItem = async (route, id, data) => {
     try {
       const result = await httpClient.patch(`${route}/${id}`, data);
@@ -105,6 +120,21 @@ export const GlobalProvider = ({ children }) => {
           route,
         },
         payload: result.data,
+      });
+    } catch (error) {
+      dispatchError(error);
+    }
+  };
+
+  const deleteItem = async (route, id) => {
+    try {
+      const result = await httpClient.delete(`${route}/${id}`);
+      dispatch({
+        type: {
+          name: ACTIONS.delete,
+          route,
+        },
+        payload: id,
       });
     } catch (error) {
       dispatchError(error);
@@ -134,7 +164,9 @@ export const GlobalProvider = ({ children }) => {
         listItems,
         getItem,
         postItem,
+        editItem,
         patchItem,
+        deleteItem,
       }}
     >
       {children}

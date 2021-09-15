@@ -1,12 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  Typography,
-  Paper,
-  Button,
-  TextField,
-  Grid,
-} from '@material-ui/core';
+import { Button, TextField, Grid } from '@material-ui/core';
 import { SelectControl } from '../FormControls/SelectControl';
 import { DatePickerControl } from '../FormControls/DatePickerControl';
 import { makeStyles } from '@material-ui/core';
@@ -15,27 +7,18 @@ import * as Yup from 'yup';
 import { loadMilestonesFromTemplate } from '../../utils/loadMilestonesFromTemplate';
 import { GlobalContext } from '../../context/GlobalState';
 import { useContext, useEffect } from 'react';
-import './ProgramDialog.css';
+import { Dialog } from '../Dialog';
 
 const useStyles = (props) =>
   makeStyles((theme) => ({
-    paperRoot: {
-      background: theme.customBackgrounds[`${props.color}`],
-      boxShadow: theme.customShadows[`${props.color}`],
-    },
     stepperRoot: {
       background: 'rgb(0 0 0 / 0)',
       border: 'none',
       boxShadow: 'none',
     },
-    dialogRoot: {
-      overflowY: 'visible',
-    },
-    dialogPaper: {
-      overflowY: 'visible',
-    },
-    dialogContentRoot: {
-      overflowY: 'visible',
+    formControlRoot: {
+      width: '100%',
+      marginBottom: '24px !important',
     },
   }));
 
@@ -91,42 +74,38 @@ export default function ProgramDialog(props) {
 
   return (
     <Dialog
+      title="Template Selection"
       open={open}
-      classes={{ root: classes.dialogRoot, paper: classes.dialogPaper }}
-    >
-      <DialogContent
-        classes={{ root: classes.dialogContentRoot }}
-        className="dialog-content"
-      >
-        <Paper classes={{ root: classes.paperRoot }} className="dialog-header">
-          <Typography variant="h1">Template Selection</Typography>
-        </Paper>
-
+      content={
         <form>
           <Grid container>
-          <Grid xs={12}>
+            <Grid xs={12}>
+              <SelectControl
+                classes={{ root: classes.formControlRoot }}
+                name="template"
+                value={formik.values.template}
+                label="Template"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.template && Boolean(formik.errors.template)
+                }
+                helperText={
+                  formik.touched.template ? formik.errors.template : null
+                }
+                options={
+                  programTemplates
+                    ? programTemplates.map(({ _id, name }) => ({
+                        key: _id,
+                        value: _id,
+                        label: name,
+                      }))
+                    : []
+                }
+              />
+            </Grid>
             <SelectControl
-              name="template"
-              value={formik.values.template}
-              label="Template"
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.template && Boolean(formik.errors.template)}
-              helperText={
-                formik.touched.template ? formik.errors.template : null
-              }
-              options={
-                programTemplates
-                  ? programTemplates.map(({ _id, name }) => ({
-                      key: _id,
-                      value: _id,
-                      label: name,
-                    }))
-                  : []
-              }
-            />
-         </Grid>
-         <SelectControl
+              classes={{ root: classes.formControlRoot }}
               name="farmer"
               label="Farmer"
               value={formik.values.farmer}
@@ -141,45 +120,44 @@ export default function ProgramDialog(props) {
                     }))
                   : []
               }
-              error={
-                formik.touched.farmer && Boolean(formik.errors.farmer)
-              }
-              helperText={
-                formik.touched.farmer ? formik.errors.farmer : null
-              }
+              error={formik.touched.farmer && Boolean(formik.errors.farmer)}
+              helperText={formik.touched.farmer ? formik.errors.farmer : null}
             ></SelectControl>
-          <Grid xs={12}>
-            <DatePickerControl
-              label="Start Date"
-              name="startDate"
-              value={formik.values.startDate}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.startDate && Boolean(formik.errors.startDate)
-              }
-              helperText={
-                formik.touched.startDate ? formik.errors.startDate : null
-              }
-            />
-         </Grid>
-          <Grid xs={12}>
-            <TextField
-              type="number"
-              label="Acres"
-              name="acres"
-              inputProps={{ step: 'any', min: '0' }}
-              value={formik.values.acres}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.acres && Boolean(formik.errors.acres)}
-              helperText={formik.touched.acres ? formik.errors.acres : null}
-            />
-         </Grid>
+            <Grid xs={12}>
+              <DatePickerControl
+                classes={{ root: classes.formControlRoot }}
+                label="Start Date"
+                name="startDate"
+                value={formik.values.startDate}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.startDate && Boolean(formik.errors.startDate)
+                }
+                helperText={
+                  formik.touched.startDate ? formik.errors.startDate : null
+                }
+              />
+            </Grid>
+            <Grid xs={12}>
+              <TextField
+                classes={{ root: classes.formControlRoot }}
+                type="number"
+                label="Acres"
+                name="acres"
+                inputProps={{ step: 'any', min: '0' }}
+                value={formik.values.acres}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.acres && Boolean(formik.errors.acres)}
+                helperText={formik.touched.acres ? formik.errors.acres : null}
+              />
+            </Grid>
           </Grid>
         </form>
-
-        <div className="dialog-actions">
+      }
+      actions={
+        <>
           <Button onClick={(e) => onClose()}>Manual</Button>
           <Button
             variant="contained"
@@ -188,8 +166,8 @@ export default function ProgramDialog(props) {
           >
             Confirm
           </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </>
+      }
+    />
   );
 }

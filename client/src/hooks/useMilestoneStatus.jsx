@@ -8,6 +8,10 @@ export default function useMilestoneStatus(milestones, nextMilestone) {
   useEffect(() => {
     if (!milestones) return;
 
+    milestones.sort(function(a, b) {
+      return compareDates(new Date(a.date), new Date(b.date));
+    });
+
     let result = milestones
       .map((milestone) => {
         let date = new Date(milestone.date);

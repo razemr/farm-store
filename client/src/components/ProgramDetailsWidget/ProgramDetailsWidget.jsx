@@ -1,7 +1,6 @@
 import { Paper, Typography, Grid } from '@material-ui/core';
 import {
   AspectRatio,
-  CheckCircle,
   ContactPhone,
   Description,
   Email,
@@ -12,9 +11,11 @@ import {
 } from '@material-ui/icons';
 import Card from '../Card/Card';
 import './ProgramDetailsWidget.css';
+import { GlobalContext } from '../../context/GlobalState';
+import { useContext } from 'react';
 
-export default function ProgramDetails(props) {
-  const { program } = props;
+export default function ProgramDetails() {
+  const { program } = useContext(GlobalContext);
 
   return (
     Object.keys(program).length > 0 && (
@@ -30,13 +31,13 @@ export default function ProgramDetails(props) {
           />
           <Typography
             align="center"
-            variant="h5"
+            variant="h6"
             color="textSecondary"
             className="crop-name"
           >
             {program.crop.name} - Dasheen PNMS
           </Typography>
-          <Typography align="center" variant="h2">
+          <Typography align="center" variant="h4">
             {program.name}
           </Typography>
           <Typography
@@ -48,20 +49,6 @@ export default function ProgramDetails(props) {
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </Typography>
-
-          {/* <div className="program-status">
-            {program.complete ? (
-              <>
-                <CheckCircle style={{ fontSize: '30px' }} />
-                <Typography>Complete</Typography>
-              </>
-            ) : (
-              <>
-                <CheckCircle style={{ fontSize: '35px', color: 'green' }} />
-                <Typography style={{ color: 'green' }}>Completed</Typography>
-              </>
-            )}
-          </div> */}
         </Paper>
 
         <Grid container spacing={2} style={{ marginTop: '16px' }}>

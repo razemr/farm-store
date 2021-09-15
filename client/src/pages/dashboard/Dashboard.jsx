@@ -22,11 +22,6 @@ export default function Dashboard() {
         <FeatureWidget icon={<Storefront/>} title="Products" footer="Update 15 minutes ago" value="20" color="error" />
         </Grid>
       </Grid>
-
-      <div className="widgets">
-        {/* <CalendarWidget />
-        <MilestoneWidget></MilestoneWidget> */}
-      </div>
     </>
   );
 }
