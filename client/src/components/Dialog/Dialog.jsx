@@ -32,6 +32,7 @@ export default function Dialog(props) {
     <MuiDialog
       open={open}
       classes={{ root: classes.dialogRoot, paper: classes.dialogPaper }}
+      PaperProps={{elevation: 1}}
     >
       <DialogContent
         classes={{ root: classes.dialogContentRoot }}

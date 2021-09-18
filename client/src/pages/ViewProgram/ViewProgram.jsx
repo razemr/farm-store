@@ -7,27 +7,30 @@ import { Grid, IconButton } from '@material-ui/core';
 import { PageHeader } from '../../components/PageHeader';
 import { Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
+import { httpClient } from '../../http/HttpClient';
+import { useState } from 'react';
 
 export default function ViewProgram() {
-  const { getItem, program, patchItem } = useContext(GlobalContext);
+  const [program, setProgram] = useState({});
   const { id } = useParams();
   const history = useHistory();
 
-  useEffect(() => {
-    getItem('programs', id);
+  useEffect(async () => {
+    const { data } = await httpClient.get(`/programs/${id}`);
+    setProgram({ ...data.program });
   }, []);
 
   const handleEdit = () => {
     history.push(`/programs/${id}/edit`);
   };
 
-
-  const handleCheck = (status, id) => {
-    patchItem('programs', program._id, {
+  const handleCheck = async (status, id) => {
+    const {data} = await httpClient.patch(`/programs/${program._id}`, {
       target: 'milestoneStatus',
       status,
       id,
     });
+    setProgram({ ...data.program });
   };
 
   return (
@@ -37,19 +40,8 @@ export default function ViewProgram() {
           <Edit color="action" fontSize="small" />
         </IconButton>
       </PageHeader>
-      <ProgramDetailsWidget />
-      <MilestoneTimeline
-            align="alternate"
-            onCheck={handleCheck}
-          />
-      {/* <Grid container spacing={4}>
-        <Grid item xs={6}>
-          
-        </Grid>
-        <Grid item xs={6}>
-          
-        </Grid>
-      </Grid> */}
+      <ProgramDetailsWidget program={program}/>
+      <MilestoneTimeline align="alternate" onCheck={handleCheck} milestones={program.milestones} nextMilestone={program.nextMilestone}/>
     </>
   );
 }

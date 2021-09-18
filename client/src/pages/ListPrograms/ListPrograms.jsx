@@ -6,30 +6,43 @@ import {
   Typography,
   Button,
 } from '@material-ui/core';
-import { ProgramTable } from '../../components/ProgramTable';
 import { Search, Add } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import { GlobalContext } from '../../context/GlobalState';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { PageHeader } from '../../components/PageHeader';
 import { Dialog } from '../../components/Dialog';
+import { Container } from '../../components/Container';
+import { DataGrid } from '../../components/DataGrid';
+import { createColumns } from './columns';
+import { httpClient } from '../../http/HttpClient';
 
 export default function ListPrograms() {
+  const getRowId = (row) => row._id;
   const history = useHistory();
-  const { listItems, programs, deleteItem } = useContext(GlobalContext);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const [programs, setPrograms] = useState([]);
+  const [rowCount, setRowCount] = useState(0);
   const [selectedProgram, setSelectedProgram] = useState();
   const [open, setOpen] = useState(false);
+  const [sort, setSort] = useState(params.get('_sort'));
+  const [page, setPage] = useState(params.get('_page') | 0);
+  const [pageSize, setPageSize] = useState(params.get('_limit') | 25);
+  const [searchText, setSearchText] = useState(
+    params.get('q') ? params.get('q') : '',
+  );
+  const [q, setQ] = useState(params.get('q') ? params.get('q') : '');
 
   useEffect(() => {
-    listItems('programs');
-  }, []);
+    loadPrograms();
+  }, [sort, page, pageSize, searchText]);
 
   const handleOnView = (id) => {
     history.push(`/programs/${id}`);
   };
 
   const handleAdd = () => {
-    history.push(`/programs/create`);
+    history.push('/programs/create');
   };
 
   const handleOnEdit = (id) => {
@@ -41,15 +54,64 @@ export default function ListPrograms() {
     setOpen(true);
   };
 
-  const handleDeleteConfirmation = () => {
-    deleteItem('programs', selectedProgram._id);
+  const handleDeleteConfirmation = async () => {
+    await httpClient.delete(`/programs/${selectedProgram._id}`);
+    loadPrograms();
     setOpen(false);
+  };
+
+  const handleOnSortingModelChange = (model) => {
+    if (model[0]) {
+      setSort(`${model[0].field}:${model[0].sort}`);
+    } else {
+      setSort('');
+    }
+  };
+
+  const handleOnPageChange = (_page) => {
+    setPage(_page);
+  };
+
+  const handleOnPageSizeChange = (_pageSize) => {
+    setPageSize(_pageSize);
+  };
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchText(value);
+
+    if (value && value.length > 3) {
+      setQ(value);
+    } else {
+      setQ('');
+    }
+  };
+
+  const columns = createColumns(handleOnView, handleOnEdit, handleOnDelete);
+
+  const loadPrograms = async () => {
+    let query = sort ? `_sort=${sort}&` : '';
+    query = query.concat(`_page=${page}&_limit=${pageSize}`);
+    if (q) {
+      query = query.concat(`&q=${q}`);
+    }
+
+    history.push({
+      path: location.pathname,
+      search: query,
+    });
+
+    const { data } = await httpClient.get(`/programs?${query}`);
+    setPrograms([...data.programs]);
+    setRowCount(data.total);
   };
 
   return (
     <>
       <PageHeader title="Programs">
         <Input
+          value={searchText}
+          onChange={handleSearch}
           placeholder="Searh programs"
           startAdornment={
             <InputAdornment position="start">
@@ -61,12 +123,22 @@ export default function ListPrograms() {
           <Add />
         </IconButton>
       </PageHeader>
-      <ProgramTable
-        onView={handleOnView}
-        onEdit={handleOnEdit}
-        onDelete={handleOnDelete}
-        programs={programs}
-      />
+      <Container title="Programs" color="primary">
+        <DataGrid
+          color="primary"
+          rows={programs}
+          columns={columns}
+          getRowId={getRowId}
+          autoHeight={true}
+          page={page}
+          pageSize={pageSize}
+          rowCount={rowCount}
+          onSortingModelChange={handleOnSortingModelChange}
+          onPageChange={handleOnPageChange}
+          onPageSizeChange={handleOnPageSizeChange}
+          programs={programs}
+        />
+      </Container>
       <Dialog
         open={open}
         title="Confirm Deletion"
@@ -86,6 +158,7 @@ export default function ListPrograms() {
         actions={
           <>
             <Button onClick={(e) => setOpen(false)}>Cancel</Button>
+            &nbsp; &nbsp;
             <Button
               variant="contained"
               color="primary"

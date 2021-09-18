@@ -16,7 +16,7 @@ export default function ProductRow(props) {
   } = props;
 
   return (
-    <Grid container>
+    <Grid container spacing={3} justifyContent="space-between">
       <Grid item xs={4}>
         <SelectControl
           name={`${name}.product`}

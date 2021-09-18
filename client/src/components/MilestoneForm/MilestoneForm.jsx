@@ -32,7 +32,7 @@ export default function MilestoneForm(props) {
       color="primary"
       actions={actions}
     >
-      <Grid container>
+      <Grid container spacing={3} justifyContent="space-between">
         <Grid item xs={4}>
           <DatePickerControl
             label="Application Date"

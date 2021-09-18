@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loadMilestonesFromTemplate } from '../../utils/loadMilestonesFromTemplate';
 import { GlobalContext } from '../../context/GlobalState';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Dialog } from '../Dialog';
 
 const useStyles = (props) =>
@@ -24,12 +24,8 @@ const useStyles = (props) =>
 
 export default function ProgramDialog(props) {
   const { open, onClose, color } = props;
-  const { listItems, farmers, programTemplates } = useContext(GlobalContext);
+  const { farmers, programTemplates } = useContext(GlobalContext);
   const classes = useStyles({ color: color || 'primary' })();
-
-  useEffect(() => {
-    listItems(['farmers', 'programTemplates']);
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -53,6 +49,7 @@ export default function ProgramDialog(props) {
       const template = programTemplates.find(
         (template) => template._id === values.template,
       );
+      const farmer = farmers.find((farmer) => farmer._id === values.farmer);
       const { milestones, endDate } = loadMilestonesFromTemplate(
         template.milestones,
         startDate,
@@ -62,8 +59,11 @@ export default function ProgramDialog(props) {
       onClose({
         template: values.template,
         farmer: values.farmer,
+        parish: farmer.parish,
+        radaExtension: farmer.radaExtension,
         name: template.name,
         crop: template.crop,
+        description: template.description,
         acres,
         endDate,
         milestones,
@@ -79,7 +79,7 @@ export default function ProgramDialog(props) {
       content={
         <form>
           <Grid container>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <SelectControl
                 classes={{ root: classes.formControlRoot }}
                 name="template"
@@ -123,7 +123,7 @@ export default function ProgramDialog(props) {
               error={formik.touched.farmer && Boolean(formik.errors.farmer)}
               helperText={formik.touched.farmer ? formik.errors.farmer : null}
             ></SelectControl>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <DatePickerControl
                 classes={{ root: classes.formControlRoot }}
                 label="Start Date"
@@ -139,7 +139,7 @@ export default function ProgramDialog(props) {
                 }
               />
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <TextField
                 classes={{ root: classes.formControlRoot }}
                 type="number"

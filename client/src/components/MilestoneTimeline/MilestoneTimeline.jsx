@@ -34,11 +34,10 @@ const useStyles = makeStyles({
 });
 
 export default function MilestoneTimeline(props) {
-  const { program } = useContext(GlobalContext);
-  const { onCheck, align } = props;
+  const { milestones, nextMilestone, onCheck, align } = props;
   const statusMilestones = useMilestoneStatus(
-    program.milestones,
-    program.nextMilestone,
+    milestones,
+    nextMilestone,
   );
 
   const classes = useStyles();

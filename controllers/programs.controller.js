@@ -1,20 +1,48 @@
 const Program = require('../models/program.model');
+const ProgramTemplate = require('../models/programTemplate.model');
 const Farmer = require('../models/farmer.model');
 const Milestone = require('../models/milestone.model');
+const Crop = require('../models/crop.model');
+const Parish = require('../models/parish.model');
+const RadaExtension = require('../models/radaExtension.model');
 
 exports.addProgram = async (req, res, next) => {
   try {
-    const { endDate, name, startDate, acres, crop, farmer, template } =
-      req.body;
-
-    let program = await Program.create({
-      crop,
-      farmer,
-      template,
+    const {
       endDate,
       name,
       startDate,
       acres,
+      crop,
+      radaExtension,
+      parish,
+      farmer,
+      template,
+      description,
+    } = req.body;
+
+    const _template = await ProgramTemplate.findById(template);
+    const { firstName, lastName } = await Farmer.findById(farmer);
+    const _crop = await Crop.findById(crop);
+    const _parish = await Parish.findById(parish);
+    const _radaExtension = await RadaExtension.findById(radaExtension);
+
+    let program = await Program.create({
+      crop,
+      cropName: _crop.name,
+      farmer: farmer,
+      farmerName: `${firstName} ${lastName}`,
+      parish,
+      parishName: _parish.name,
+      radaExtension,
+      radaExtensionName: _radaExtension.name,
+      template,
+      templateName: _template ? _template.name : 'Custom Template',
+      endDate,
+      name,
+      startDate,
+      acres,
+      description,
     });
 
     req.params.id = program._id;
@@ -63,19 +91,34 @@ exports.editProgram = async (req, res, next) => {
       startDate,
       acres,
       crop,
+      radaExtension,
+      parish,
       farmer,
-      template,
       milestones,
+      description,
     } = req.body;
 
+    const { firstName, lastName } = await Farmer.findById(farmer);
+    const _crop = await Crop.findById(crop);
+    const _parish = await Parish.findById(parish);
+    const _radaExtension = await RadaExtension.findById(radaExtension);
+
     await Program.findByIdAndUpdate(req.params.id, {
-      crop,
-      farmer,
-      template,
-      endDate,
-      name,
-      startDate,
-      acres,
+      $set: {
+        crop,
+        cropName: _crop.name,
+        radaExtension,
+        radaExtensionName: _radaExtension.name,
+        parish,
+        parishName: _parish.name,
+        farmer,
+        farmerName: `${firstName} ${lastName}`,
+        endDate,
+        name,
+        startDate,
+        acres,
+        description,
+      },
     });
 
     let program = await Program.findById(req.params.id);
@@ -104,7 +147,9 @@ exports.editProgram = async (req, res, next) => {
     for (let i = 0; i < milestones.length; i++) {
       let { _id, date, productApplications } = milestones[i];
       if (_id) {
-        await Milestone.findByIdAndUpdate(_id, { date, productApplications });
+        await Milestone.findByIdAndUpdate(_id, {
+          $set: { date, productApplications },
+        });
       } else {
         const milestone = await Milestone.create({ date, productApplications });
         await Program.findByIdAndUpdate(req.params.id, {
@@ -112,12 +157,21 @@ exports.editProgram = async (req, res, next) => {
         });
       }
     }
-    const nextMilestone = await getNextMilestone(req.params.id);
-    await Program.findByIdAndUpdate(req.params.id, { nextMilestone });
+
+    program = await Program.findById(req.params.id).populate('milestones');
+    let completed = true;
+    program.milestones.forEach((milestone) => {
+      if (!milestone.notifiedFarmer) completed = false;
+    });
+
+    const nextMilestone = await getNextMilestone(program);
+
+    await Program.findByIdAndUpdate(req.params.id, {
+      $set: { nextMilestone, completed },
+    });
 
     next();
   } catch (error) {
-    console.log(error)
     next(error);
   }
 };
@@ -125,17 +179,22 @@ exports.editProgram = async (req, res, next) => {
 exports.listPrograms = async (req, res, next) => {
   try {
     const { q, _limit, _page, _sort } = req.query;
-    const limit = _limit ? Number(_limit) : 50;
-    const page = _page ? Number(_page) : 1;
-    const sort = _sort ? _sort.split(',').join(' ') : 'name';
+    const limit = _limit ? Number(_limit) : 25;
+    const page = _page ? Number(_page) + 1 : 1;
+    const sort = _sort ? _sort.split(':') : ['name'];
+    if (sort[1] === 'desc') {
+      sort[0] = `-${sort[0]}`;
+    }
 
-    const total = await Program.count({ name: new RegExp(q, 'gi') });
-    const programs = await Program.find({ name: new RegExp(q, 'gi') })
-      .populate('farmer', 'firstName lastName')
-      .populate('crop', 'name')
+    const total = await Program.count({
+      $or: [{ name: new RegExp(q, 'gi') }, { farmerName: new RegExp(q, 'gi') }],
+    });
+    const programs = await Program.find({
+      $or: [{ name: new RegExp(q, 'gi') }, { farmerName: new RegExp(q, 'gi') }],
+    })
       .skip((page - 1) * limit)
       .limit(limit)
-      .sort(sort);
+      .sort(sort[0]);
 
     res.status(200).json({
       total,
@@ -149,8 +208,7 @@ exports.listPrograms = async (req, res, next) => {
 exports.getProgram = async (req, res, next) => {
   try {
     const program = await Program.findById(req.params.id)
-      .populate('farmer', 'firstName lastName')
-      .populate('crop', 'name')
+      .populate('farmer')
       .populate({
         path: 'milestones',
         populate: [
@@ -182,7 +240,9 @@ exports.getProgram = async (req, res, next) => {
 exports.updateMilestoneStatus = async (req, res, next) => {
   try {
     await Milestone.findByIdAndUpdate(req.body.id, {
-      notifiedFarmer: req.body.status,
+      $set: {
+        notifiedFarmer: req.body.status,
+      },
     });
 
     const program = await Program.findById(req.params.id).populate(
@@ -190,9 +250,15 @@ exports.updateMilestoneStatus = async (req, res, next) => {
       'date notifiedFarmer',
     );
 
+    let completed = true;
+    program.milestones.forEach((milestone) => {
+      if (!milestone.notifiedFarmer) completed = false;
+    });
     const nextMilestone = await getNextMilestone(program);
 
-    await Program.findByIdAndUpdate(req.params.id, { nextMilestone });
+    await Program.findByIdAndUpdate(req.params.id, {
+      $set: { nextMilestone, completed },
+    });
     next();
   } catch (error) {
     return res.status(500).json({
@@ -210,17 +276,17 @@ exports.deleteProgram = async (req, res, next) => {
       $pull: { programs: program._id },
     });
 
-    await Milestone.remove({program: program._id});
+    await Milestone.remove({ program: program._id });
 
-    res.status(200).send({program});
+    res.status(200).send({ program });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     next(error);
   }
 };
 
 const getNextMilestone = async (id) => {
-  program = await Program.findById(id).populate(
+  const program = await Program.findById(id).populate(
     'milestones',
     'date notifiedFarmer',
   );

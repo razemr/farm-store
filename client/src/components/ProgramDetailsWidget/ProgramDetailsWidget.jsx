@@ -11,11 +11,9 @@ import {
 } from '@material-ui/icons';
 import Card from '../Card/Card';
 import './ProgramDetailsWidget.css';
-import { GlobalContext } from '../../context/GlobalState';
-import { useContext } from 'react';
 
-export default function ProgramDetails() {
-  const { program } = useContext(GlobalContext);
+export default function ProgramDetails(props) {
+  const { program } = props;
 
   return (
     Object.keys(program).length > 0 && (
@@ -24,8 +22,8 @@ export default function ProgramDetails() {
           <img
             className="details-image"
             src={
-              Boolean(program.crop) &&
-              `${process.env.PUBLIC_URL}/images/${program.crop.name}.jpg`
+              Boolean(program.cropName) &&
+              `${process.env.PUBLIC_URL}/images/${program.cropName}.jpg`
             }
             alt=""
           />
@@ -35,7 +33,7 @@ export default function ProgramDetails() {
             color="textSecondary"
             className="crop-name"
           >
-            {program.crop.name} - Dasheen PNMS
+            {program.cropName} - {program.templateName}
           </Typography>
           <Typography align="center" variant="h4">
             {program.name}
@@ -46,8 +44,7 @@ export default function ProgramDetails() {
             paragraph
             className="program-description"
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            {program.description}
           </Typography>
         </Paper>
 
@@ -85,17 +82,17 @@ export default function ProgramDetails() {
               />
               <PropertyItem
                 title="Phone"
-                value="876 (841-4857"
+                value={program.farmer.phoneNumber}
                 icon={<Phone color="disabled" />}
               />
               <PropertyItem
                 title="Email"
-                value="rgraham@jpsco.com"
+                value={program.farmer.emailAddress}
                 icon={<Email color="disabled" />}
               />
               <PropertyItem
-                title="Parish"
-                value="Westmoreland"
+                title="Location"
+                value={`${program.radaExtensionName}, ${program.parishName}`}
                 icon={<LocationOn color="disabled" />}
               />
           </Card>

@@ -1,6 +1,4 @@
-import { DataGrid } from '@material-ui/data-grid';
-import { Paper, Typography } from '@material-ui/core';
-import './TableWidget.css';
+import { DataGrid as MuiDataGrid } from '@material-ui/data-grid';
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = (props) =>
@@ -36,41 +34,45 @@ const useStyles = (props) =>
     },
   }));
 
-export default function TableWidget(props) {
+export default function DataGrid(props) {
   const {
     rows,
     columns,
     getRowId,
-    pageSize,
     title,
-    onRowClick,
     color,
+    onRowClick,
+    pageSize,
+    page,
+    rowCount,
+    onSortingModelChange,
+    onPageChange,
+    onPageSizeChange,
+    onFilterModelChange,
     ...other
   } = props;
   const classes = useStyles({ color })();
   return (
-    <Paper elevation={1} className="table-wrapper">
-      <Paper classes={{ root: classes.paperRoot }} className="table-header">
-        <Typography align="right" variant="h4">
-          {title}
-        </Typography>
-        <Typography align="right" variant="subtitle1">
-          Total Programs: 87
-        </Typography>
-      </Paper>
-      <DataGrid
-        classes={{
-          root: classes.root,
-          columnHeader: classes.columnHeader,
-          cell: classes.cell,
-        }}
-        rows={rows}
-        getRowId={getRowId}
-        columns={columns}
-        pageSize={pageSize}
-        disableSelectionOnClick={true}
-        {...other}
-      />
-    </Paper>
+    <MuiDataGrid
+      classes={{
+        root: classes.root,
+        columnHeader: classes.columnHeader,
+        cell: classes.cell,
+      }}
+      rows={rows}
+      getRowId={getRowId}
+      columns={columns}
+      page={page}
+      pageSize={pageSize}
+      rowCount={rowCount}
+      onPageSizeChange={onPageSizeChange}
+      disableSelectionOnClick={true}
+      paginationMode="server"
+      onPageChange={onPageChange}
+      sortingMode="server"
+      onSortModelChange={onSortingModelChange}
+      disableColumnMenu={true}
+      {...other}
+    />
   );
 }

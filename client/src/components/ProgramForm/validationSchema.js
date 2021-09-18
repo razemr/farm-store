@@ -3,6 +3,9 @@ import * as Yup from 'yup';
 export const validationSchema = Yup.object({
   name: Yup.string().required('Program name is required'),
   farmer: Yup.string().required('Farmer is required'),
+  description: Yup.string().required('Description is required'),
+  parish: Yup.string().required('Parish is required'),
+  radaExtension: Yup.string().required('RADA extension is required'),
   startDate: Yup.date()
     .nullable()
     .typeError('Invalid Date')

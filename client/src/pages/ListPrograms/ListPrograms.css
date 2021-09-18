@@ -1,17 +1,6 @@
-.header {
+.action-icons {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-  margin-bottom: 20px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.header-actions button {
-  margin-left: 20px;
+  text-align: center;
+  width: 100%;
 }

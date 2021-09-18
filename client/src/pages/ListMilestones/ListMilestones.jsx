@@ -6,10 +6,9 @@ import { Event, List, Timeline } from '@material-ui/icons';
 import { PageHeader } from '../../components/PageHeader';
 
 export default function ListMilestones() {
-  const { listItems, milestones } = useContext(GlobalContext);
-
+ 
   useEffect(() => {
-    listItems('milestones');
+    
   }, []);
 
   const handleCheck = (status, id) => {
@@ -29,11 +28,11 @@ export default function ListMilestones() {
           <Timeline />
         </IconButton>
       </PageHeader>
-      <MilestoneTimeline
+      {/* <MilestoneTimeline
         align="alternate"
         milestones={milestones}
         onCheck={handleCheck}
-      />
+      /> */}
     </>
   );
 }

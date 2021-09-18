@@ -13,14 +13,14 @@ const FarmerSchema = new mongoose.Schema({
         trim: true,
         required: true
     },
-    phoneNumbers: [{
+    phoneNumbers: {
         type: String,
         validate: {
             validator: (v) => {
                 return regex.phoneRegex.test(v)
             }
         }
-    }],
+    },
     emailAddress: {
         type: String,
         unique: true,

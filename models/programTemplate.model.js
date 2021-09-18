@@ -2,40 +2,49 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ProgramTemplateSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    company: {
-        type: Schema.Types.ObjectId,
-        ref: 'Company'
-    },
-    crop: {
-        type: Schema.Types.ObjectId,
-        ref: 'Crop'
-    },
-    milestoneTemplates: [{
-        daysFromStart: {
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: 'Company',
+  },
+  crop: {
+    type: Schema.Types.ObjectId,
+    ref: 'Crop',
+    required: true,
+  },
+  milestoneTemplates: [
+    {
+      daysFromStart: {
+        type: Number,
+        required: true,
+      },
+      productApplications: [
+        {
+          product: {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+            required: true,
+          },
+          quantity: {
             type: Number,
-            required: true
+            required: true,
+          },
+          unit: {
+            type: Schema.Types.ObjectId,
+            ref: 'Unit',
+            required: true,
+          },
         },
-        productApplications: [{
-            product: {
-                type: Schema.Types.ObjectId,
-                ref: 'Product'
-            },
-            quantity: {
-                type: Number,
-                required: true
-            },
-            unit: {
-                type: String,
-                enum: {
-                    values: ['lb', 'kg', 'l', 'gal', 'pack']
-                }
-            }
-        }]
-    }]
+      ],
+    },
+  ],
 });
 
 module.exports = mongoose.model('ProgramTemplate', ProgramTemplateSchema);
