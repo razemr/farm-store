@@ -63,12 +63,12 @@ exports.deleteProgramTemplate = async (req, res, next) => {
 
 exports.listProgramTemplates = async (req, res, next) => {
   try {
-    const { q, _limit, _page, _sort } = req.query;
-    const limit = _limit ? Number(_limit) : 10;
-    const page = _page ? Number(_page) : 1;
-    const sort = _sort ? _sort.split(',').join(' ') : 'name';
+    const { q, page, limit, sort } = req.body.queryParams;
     const searchQuery = {
-      name: new RegExp(q, 'gi'),
+      $or: [
+        { name: new RegExp(q, 'gi') },
+        { description: new RegExp(q, 'gi') },
+      ],
     };
 
     const total = await ProgramTemplate.count(searchQuery);

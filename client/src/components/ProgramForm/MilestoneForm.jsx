@@ -1,13 +1,20 @@
 import './MilestoneForm.css';
 import { Grid, IconButton } from '@material-ui/core';
 import { DatePickerControl } from '../FormControls/DatePickerControl';
-import { ProductRow } from '../ProductRow';
+import ProductRow from './ProductRow';
 import { FieldArray } from 'formik';
 import { Close, Add, Timeline } from '@material-ui/icons';
-import { useStyles } from './useStyles';
 import { Card } from '../Card';
 import { useContext } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
+import { makeStyles } from '@material-ui/core';
+
+export const useStyles = makeStyles({
+  productRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+});
 
 export default function MilestoneForm(props) {
   const { units, products } = useContext(GlobalContext);
@@ -37,6 +44,7 @@ export default function MilestoneForm(props) {
           <DatePickerControl
             label="Application Date"
             name={`${name}.date`}
+            required
             value={date}
             onBlur={onBlur}
             onChange={onChange}
@@ -54,32 +62,38 @@ export default function MilestoneForm(props) {
             {productApplications.length > 0 &&
               productApplications.map((p, index) => (
                 <div className={classes.productRow} key={index}>
-                  <ProductRow
-                    units={units}
-                    products={products}
-                    product={p.product}
-                    quantity={p.quantity}
-                    unit={p.unit}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    name={`${name}.productApplications.${index}`}
-                    errors={
-                      errors && errors.productApplications
-                        ? errors.productApplications[index]
-                        : {}
-                    }
-                    touched={
-                      touched && touched.productApplications
-                        ? touched.productApplications[index]
-                        : {}
-                    }
-                  />
-                  <IconButton
-                    style={{ visibility: index === 0 && 'hidden' }}
-                    onClick={(e) => arrayHelpers.remove(index)}
-                  >
-                    <Close />
-                  </IconButton>
+                  <Grid container>
+                    <Grid item xs={11}>
+                      <ProductRow
+                        units={units}
+                        products={products}
+                        product={p.product}
+                        quantity={p.quantity}
+                        unit={p.unit}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        name={`${name}.productApplications.${index}`}
+                        errors={
+                          errors && errors.productApplications
+                            ? errors.productApplications[index]
+                            : {}
+                        }
+                        touched={
+                          touched && touched.productApplications
+                            ? touched.productApplications[index]
+                            : {}
+                        }
+                      />
+                    </Grid>
+                    <Grid item xs={1}>
+                      <IconButton
+                        style={{ visibility: index === 0 && 'hidden' }}
+                        onClick={(e) => arrayHelpers.remove(index)}
+                      >
+                        <Close />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
                 </div>
               ))}
             <IconButton

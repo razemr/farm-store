@@ -3,7 +3,7 @@ import { ProgramForm } from '../../components/ProgramForm';
 import { useState } from 'react';
 import { emptyProgram } from './emptyProgram';
 import { PageHeader } from '../../components/PageHeader';
-import { ProgramDialog } from '../../components/ProgramDialog';
+import ProgramDialog from './ProgramDialog';
 import { httpClient } from '../../http/HttpClient';
 
 export default function CreateProgram() {

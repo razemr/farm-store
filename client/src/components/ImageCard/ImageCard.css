@@ -1,0 +1,15 @@
+.image-card-wrapper {
+    position: relative;
+    padding: 70px 32px 64px 32px;
+}
+
+.image-card-image {
+    position: absolute;
+    height: 120px;
+    width: 120px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: -60px;
+    border-radius: 50%;
+    box-shadow: 0 16px 38px -12px #6d1b7b56, 0 4px 25px 0 #6d1b7b12, 0 8px 10px -5px #6d1b7b20;
+}

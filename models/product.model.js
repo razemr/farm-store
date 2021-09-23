@@ -9,14 +9,29 @@ const ProductSchema = new mongoose.Schema({
         unique: true
     },
     description: {
-        type: String
+        type: String,
+        required: true,
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'ProductCategory'
+        ref: 'ProductCategory',
+        required: true,
+    },
+    categoryName: {
+        type: String,
+        required: true,
     },
     imageUrl: {
         type: String
+    },
+    company: {
+        type: Schema.Types.ObjectId,
+        ref: 'Company',
+        required: true,
+    },
+    companyName: {
+        type: String,
+        required: true,
     }
 });
 

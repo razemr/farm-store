@@ -14,9 +14,17 @@ const ProgramTemplateSchema = new mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: 'Company',
   },
+  companyName: {
+    type: String,
+    required: true,
+  },
   crop: {
     type: Schema.Types.ObjectId,
     ref: 'Crop',
+    required: true,
+  },
+  cropName: {
+    type: String,
     required: true,
   },
   milestoneTemplates: [

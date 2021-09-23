@@ -1,13 +1,13 @@
 import { Button, TextField, Grid } from '@material-ui/core';
-import { SelectControl } from '../FormControls/SelectControl';
-import { DatePickerControl } from '../FormControls/DatePickerControl';
+import { SelectControl } from '../../components/FormControls/SelectControl';
+import { DatePickerControl } from '../../components/FormControls/DatePickerControl';
 import { makeStyles } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { loadMilestonesFromTemplate } from '../../utils/loadMilestonesFromTemplate';
 import { GlobalContext } from '../../context/GlobalState';
 import { useContext } from 'react';
-import { Dialog } from '../Dialog';
+import { Dialog } from '../../components/Dialog';
 
 const useStyles = (props) =>
   makeStyles((theme) => ({
@@ -33,6 +33,7 @@ export default function ProgramDialog(props) {
       startDate: null,
       acres: '',
       name: '',
+      farmer: '',
     },
     validationSchema: Yup.object({
       template: Yup.string().required('Template is required'),
@@ -83,6 +84,7 @@ export default function ProgramDialog(props) {
               <SelectControl
                 classes={{ root: classes.formControlRoot }}
                 name="template"
+                required
                 value={formik.values.template}
                 label="Template"
                 onChange={formik.handleChange}
@@ -108,6 +110,7 @@ export default function ProgramDialog(props) {
               classes={{ root: classes.formControlRoot }}
               name="farmer"
               label="Farmer"
+              required
               value={formik.values.farmer}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -128,6 +131,7 @@ export default function ProgramDialog(props) {
                 classes={{ root: classes.formControlRoot }}
                 label="Start Date"
                 name="startDate"
+                required
                 value={formik.values.startDate}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -145,6 +149,7 @@ export default function ProgramDialog(props) {
                 type="number"
                 label="Acres"
                 name="acres"
+                required
                 inputProps={{ step: 'any', min: '0' }}
                 value={formik.values.acres}
                 onChange={formik.handleChange}

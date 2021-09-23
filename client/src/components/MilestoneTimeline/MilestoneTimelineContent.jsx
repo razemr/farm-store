@@ -47,7 +47,7 @@ export const MilestoneTimelineContent = (props) => {
                 <Typography variant="h5">Product</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h5">Type</Typography>
+                <Typography variant="h5">Category</Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="h5">Quantity</Typography>

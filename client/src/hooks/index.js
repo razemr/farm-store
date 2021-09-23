@@ -1,3 +1,3 @@
-import useMilestoneStatus from "./useMilestoneStatus";
+import useMilestoneStatus from './useMilestoneStatus';
 
 export { useMilestoneStatus };

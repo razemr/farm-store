@@ -1,4 +1,4 @@
-import { Chip, Typography } from '@material-ui/core';
+import { Chip, Typography, Button } from '@material-ui/core';
 import { Edit, Close, Visibility } from '@material-ui/icons';
 import { getMilestoneStatus } from '../../utils/getMilestoneStatus';
 import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
@@ -7,10 +7,7 @@ export const createColumns = (onView, onEdit, onDelete) => [
   {
     field: 'name',
     headerName: 'Name',
-    flex: 2,
-    renderCell: (params) => {
-      return <Typography variant="body1">{params.row.name}</Typography>;
-    },
+    flex: 2
   },
   {
     sortable: false,
@@ -48,38 +45,23 @@ export const createColumns = (onView, onEdit, onDelete) => [
     flex: 2,
     renderCell: (params) => {
       const date = new Date(params.row.nextMilestone);
-      return (
-        <Typography variant="body1">
-          {!params.row.completed ? date.toLocaleDateString() : '-'}
-        </Typography>
-      );
+      return !params.row.completed ? date.toLocaleDateString() : '-';
     },
   },
   {
     field: 'farmerName',
     headerName: 'Farmer',
-    flex: 2,
-    renderCell: (params) => {
-      return <Typography variant="body1">{params.row.farmerName}</Typography>;
-    },
+    flex: 2
   },
   {
     field: 'parishName',
     headerName: 'Parish',
-    flex: 2,
-    renderCell: (params) => {
-      return <Typography variant="body1">{params.row.parishName}</Typography>;
-    },
+    flex: 2
   },
   {
     field: 'radaExtensionName',
     headerName: 'Extension',
-    flex: 2,
-    renderCell: (params) => {
-      return (
-        <Typography variant="body1">{params.row.radaExtensionName}</Typography>
-      );
-    },
+    flex: 2
   },
   {
     sortable: false,
@@ -88,28 +70,29 @@ export const createColumns = (onView, onEdit, onDelete) => [
     flex: 1,
     renderCell: (params) => {
       return (
-        <div className="action-icons">
-          <Visibility
-            style={{ color: '#4caf50', cursor: 'pointer' }}
-            fontSize="small"
-            className="action-icon"
-            onClick={(e) => onView(params.row._id)}
-          />
-          <Edit
-            style={{ cursor: 'pointer' }}
-            color="primary"
-            fontSize="small"
-            className="action-icon"
-            onClick={(e) => onEdit(params.row._id)}
-          />
-          <Close
-            style={{ cursor: 'pointer' }}
-            color="error"
-            fontSize="small"
-            className="action-icon"
-            onClick={(e) => onDelete(params.row)}
-          />
-        </div>
+        <Button variant="outlined" onClick={(e) => onView(params.row._id)}>View</Button>
+        // <div className="action-icons">
+        //   <Visibility
+        //     style={{ color: '#4caf50', cursor: 'pointer' }}
+        //     fontSize="small"
+        //     className="action-icon"
+        //     onClick={(e) => onView(params.row._id)}
+        //   />
+        //   <Edit
+        //     style={{ cursor: 'pointer' }}
+        //     color="primary"
+        //     fontSize="small"
+        //     className="action-icon"
+        //     onClick={(e) => onEdit(params.row._id)}
+        //   />
+        //   <Close
+        //     style={{ cursor: 'pointer' }}
+        //     color="error"
+        //     fontSize="small"
+        //     className="action-icon"
+        //     onClick={(e) => onDelete(params.row)}
+        //   />
+        // </div>
       );
     },
   },

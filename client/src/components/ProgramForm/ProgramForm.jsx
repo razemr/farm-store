@@ -1,12 +1,11 @@
-import { Grid, TextField, Button, IconButton } from '@material-ui/core';
+import { Grid, TextField, Button, IconButton, makeStyles } from '@material-ui/core';
 import { Delete, Assignment } from '@material-ui/icons';
 import { Formik, FieldArray } from 'formik';
 import { SelectControl } from '../FormControls/SelectControl';
 import { DatePickerControl } from '../FormControls/DatePickerControl';
-import { MilestoneForm } from '../MilestoneForm';
+import MilestoneForm  from './MilestoneForm';
 import { validationSchema } from './validationSchema';
 import { Card } from '../Card';
-import { makeStyles } from '@material-ui/core';
 import { useContext } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
 
@@ -35,8 +34,7 @@ export default function ProgramForm(props) {
     useContext(GlobalContext);
 
   return (
-    <Grid container>
-      <Grid item xs={2}></Grid>
+    <Grid container justifyContent="center">
       <Grid item xs={8}>
         {program ? (
           <Formik
@@ -61,11 +59,12 @@ export default function ProgramForm(props) {
                   label={<Assignment fontSize="large" />}
                   color="primary"
                 >
-                  <Grid container spacing={9}>
+                  <Grid container spacing={10}>
                     <Grid item xs={6}>
                       <TextField
                         label="Program Name"
                         name="name"
+                        required
                         value={values.name}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -75,6 +74,7 @@ export default function ProgramForm(props) {
                       <SelectControl
                         name="crop"
                         label="Crop"
+                        required
                         value={values.crop}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -93,6 +93,7 @@ export default function ProgramForm(props) {
                       <DatePickerControl
                         label="Start Date"
                         name="startDate"
+                        required
                         value={values.startDate}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -102,6 +103,7 @@ export default function ProgramForm(props) {
                       <SelectControl
                         name="parish"
                         label="Parish"
+                        required
                         value={values.parish}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -122,6 +124,7 @@ export default function ProgramForm(props) {
                       <SelectControl
                         name="farmer"
                         label="Farmer"
+                        required
                         value={values.farmer}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -141,6 +144,7 @@ export default function ProgramForm(props) {
                         type="number"
                         label="Acres"
                         name="acres"
+                        required
                         value={values.acres}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -151,6 +155,7 @@ export default function ProgramForm(props) {
                       <DatePickerControl
                         label="End Date"
                         name="endDate"
+                        required
                         value={values.endDate}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -160,6 +165,7 @@ export default function ProgramForm(props) {
                       <SelectControl
                         name="radaExtension"
                         label="RADA Extension"
+                        required
                         value={values.radaExtension}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -187,6 +193,7 @@ export default function ProgramForm(props) {
                         label="Description"
                         name="description"
                         multiline
+                        required
                         value={values.description}
                         onBlur={handleBlur}
                         onChange={handleChange}
@@ -282,7 +289,6 @@ export default function ProgramForm(props) {
           ''
         )}
       </Grid>
-      <Grid item xs={2}></Grid>
     </Grid>
   );
 }

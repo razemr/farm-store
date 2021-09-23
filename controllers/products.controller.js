@@ -57,10 +57,7 @@ exports.deleteProduct = async (req, res, next) => {
 
 exports.listProducts = async (req, res, next) => {
   try {
-    const { q, _limit, _page, _sort } = req.query;
-    const limit = _limit ? Number(_limit) : 10;
-    const page = _page ? Number(_page) : 1;
-    const sort = _sort ? _sort.split(',').join(' ') : 'name';
+    const { q, page, limit, sort } = req.body.queryParams;
     const searchQuery = {
       $or: [
         { name: new RegExp(q, 'gi') },
@@ -79,6 +76,7 @@ exports.listProducts = async (req, res, next) => {
       products,
     });
   } catch (error) {
+    console.log(error)
     next(error);
   }
 };

@@ -21,6 +21,7 @@ export default function ProductRow(props) {
         <SelectControl
           name={`${name}.product`}
           label="Product"
+          required
           options={
             products
               ? products.map(({ _id, name }) => ({
@@ -48,6 +49,7 @@ export default function ProductRow(props) {
           name={`${name}.quantity`}
           type="number"
           label="Quantity"
+          required
           value={quantity}
           onChange={onChange}
           onBlur={onBlur}
@@ -66,6 +68,7 @@ export default function ProductRow(props) {
         <SelectControl
           name={`${name}.unit`}
           label="Unit"
+          required
           options={
             units
               ? units.map(({ _id, name }) => ({

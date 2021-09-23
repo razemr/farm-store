@@ -10,6 +10,11 @@ import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { GlobalProvider } from './context/GlobalState';
 import { theme } from './theme';
+import { ListFarmers } from './pages/ListFarmers';
+import { CreateFarmer } from './pages/CreateFarmer';
+import { EditFarmer } from './pages/EditFarmer';
+import { ListProducts } from './pages/ListProducts';
+import { ListTemplates } from './pages/ListTemplates';
 
 function App() {
   return (
@@ -35,6 +40,31 @@ function App() {
                 </Switch>
               </Route>
               <Route path="/milestones" exact component={ListMilestones} />
+              <Route path="/farmers">
+                <Switch>
+                  <Route path="/farmers" exact component={ListFarmers} />
+                  <Route
+                    path="/farmers/create"
+                    exact
+                    component={CreateFarmer}
+                  />
+                  <Route
+                    path="/farmers/:id/edit"
+                    exact
+                    component={EditFarmer}
+                  />
+                </Switch>
+              </Route>
+              <Route path="/products">
+                <Switch>
+                  <Route path="/products" exact component={ListProducts} />
+                </Switch>
+              </Route>
+              <Route path="/templates">
+                <Switch>
+                  <Route path="/templates" exact component={ListTemplates} />
+                </Switch>
+              </Route>
             </Switch>
           </main>
         </Router>

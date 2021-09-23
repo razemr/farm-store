@@ -6,8 +6,9 @@ const {
   editProgram,
   deleteProgram,
   listPrograms,
-  updateMilestoneStatus
+  updateMilestoneStatus,
 } = require('../controllers/programs.controller');
+const { parseQuery } = require('../middlewares/parseQuery.middleware');
 
 router
   .route('/:id')
@@ -16,6 +17,8 @@ router
   .delete(deleteProgram)
   .patch(updateMilestoneStatus, getProgram);
 
-router.route('/').get(listPrograms).post(addProgram, getProgram);
+router.route('/')
+  .get(parseQuery, listPrograms)
+  .post(addProgram, getProgram);
 
 module.exports = router;

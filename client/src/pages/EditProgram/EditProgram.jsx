@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { PageHeader } from '../../components/PageHeader';
 import { ProgramForm } from '../../components/ProgramForm';
 import { useParams, useHistory } from 'react-router';
@@ -10,10 +10,17 @@ export default function EditProgram() {
   const [program, setProgram] = useState({});
   const history = useHistory();
 
-  useEffect(async () => {
-    const { data } = await httpClient.get(`/programs/${id}`);
-    setProgram({ ...data.program });
-  }, []);
+  useEffect(() => {
+    async function getProgam() {
+      try {
+        const { data } = await httpClient.get(`/programs/${id}`);
+        setProgram({ ...data.program });
+      } catch (error) {
+        //Toast error
+      }
+    }
+    getProgam();
+  }, [id]);
 
   const handleSubmit = async (values) => {
     try {

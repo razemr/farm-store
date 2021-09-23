@@ -51,7 +51,7 @@ export default function MilestoneTimeline(props) {
       {statusMilestones &&
         statusMilestones.map((milestone, index) => (
           <TimelineItem
-            // classes={{ missingOppositeContent: classes.missingOppositeContent }}
+            classes={{ missingOppositeContent: align !== 'center' ? classes.missingOppositeContent : '' }}
             key={milestone._id}
           >
             <MiliestonTimelineSeparator status={milestone.status} />
