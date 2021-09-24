@@ -1,15 +1,22 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { MilestoneTimeline } from '../../components/MilestoneTimeline';
 import { Grid, IconButton, Typography } from '@material-ui/core';
 import { PageHeader } from '../../components/PageHeader';
-import { Edit, Person, Phone, Email, LocationOn } from '@material-ui/icons';
+import {
+  Edit,
+  Person,
+  Phone,
+  Email,
+  LocationOn,
+  Delete,
+} from '@material-ui/icons';
 import { useHistory } from 'react-router-dom';
 import { httpClient } from '../../http/HttpClient';
-import { useState } from 'react';
 import ImageCard from '../../components/ImageCard/ImageCard';
 import { makeStyles } from '@material-ui/styles';
 import Feature from '../../components/Feature/Feature';
+import { ConfirmationDialog } from '../../components/ConfirmationDialog';
 
 const useStyles = makeStyles((theme) => ({
   marginTop1: {
@@ -34,6 +41,7 @@ export default function ViewProgram() {
   const { id } = useParams();
   const history = useHistory();
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function getProgam() {
@@ -56,18 +64,31 @@ export default function ViewProgram() {
     setProgram({ ...data.program });
   };
 
+  const handleDelete = () => {
+    setOpen(true);
+  };
+
+  const handleDeleteConfirmation = async () => {
+    await httpClient.delete(`/programs/${program._id}`);
+    setOpen(false);
+    history.push('/programs');
+  };
+
   return (
     <>
       <PageHeader title="Program Detail">
         <IconButton onClick={handleEdit}>
-          <Edit color="action" fontSize="small" />
+          <Edit color="action" />
+        </IconButton>
+        <IconButton onClick={handleDelete}>
+          <Delete color="action" />
         </IconButton>
       </PageHeader>
       {Object.keys(program).length > 0 ? (
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <ImageCard
-              style={{marginTop: '64px'}}
+              style={{ marginTop: '64px' }}
               imageUrl={`${process.env.PUBLIC_URL}/images/${program.cropName}.jpg`}
             >
               <>
@@ -179,18 +200,15 @@ export default function ViewProgram() {
       ) : (
         ''
       )}
+      <ConfirmationDialog
+        open={open}
+        title="Delete Program"
+        content={
+          <Typography>Are you sure you want to delete this program?</Typography>
+        }
+        onCancel={(e) => setOpen(false)}
+        onConfirm={handleDeleteConfirmation}
+      />
     </>
   );
-}
-
-{
-  /* <ProgramDetailsWidget program={program} /> */
-}
-{
-  /* <MilestoneTimeline
-        align="alternate"
-        onCheck={handleCheck}
-        milestones={program.milestones}
-        nextMilestone={program.nextMilestone}
-      /> */
 }

@@ -212,7 +212,7 @@ export default function ProgramForm(props) {
                   name="milestones"
                   render={(arrayHelpers) => (
                     <div>
-                      {(values.milestones && values.milestones.length) > 0 &&
+                      {(values.milestones && values.milestones.length > 0)  &&
                         values.milestones.map((m, index) => (
                           <MilestoneForm
                             key={index}

@@ -1,11 +1,28 @@
 const ProgramTemplate = require('../models/programTemplate.model');
+const Crop = require('../models/crop.model');
+const Company = require('../models/company.model');
 
 exports.addProgramTemplate = async (req, res, next) => {
   try {
-    delete req.body._id;
+    const { name, description, milestoneTemplates } = req.body;
+    const crop = await Crop.findById(req.body.crop);
+    const company = await Company.findById(req.body.company);
 
-    const programTemplate = await ProgramTemplate.create(req.body);
-    return res.status(201).json(programTemplate);
+    const programTemplate = await ProgramTemplate.create({
+      name,
+      description,
+      crop: crop._id,
+      cropName: crop.name,
+      company: company._id,
+      companyName: company.name,
+      milestoneTemplates: milestoneTemplates.sort(
+        (first, second) => first < second,
+      ),
+    });
+
+    req.params.id = programTemplate._id;
+
+    next();
   } catch (error) {
     if (error.name === 'ValidationError') {
       res.status(400).json({
@@ -13,16 +30,48 @@ exports.addProgramTemplate = async (req, res, next) => {
         error: 'Program Template already exist.',
       });
     } else {
-      next(error);
+      return res.status(500).json({
+        success: false,
+        error: 'Server Error',
+      });
     }
+  }
+};
+
+exports.editProgramTemplate = async (req, res, next) => {
+  try {
+    const { name, description, milestoneTemplates } = req.body;
+    const crop = await Crop.findById(req.body.crop);
+    const company = await Company.findById(req.body.company);
+
+    await ProgramTemplate.findByIdAndUpdate(req.params.id, {
+      name,
+      description,
+      crop: crop._id,
+      cropName: crop.name,
+      company: company._id,
+      companyName: company.name,
+      milestoneTemplates: milestoneTemplates.sort(
+        (first, second) => first < second,
+      ),
+    });
+
+    next();
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Server Error',
+    });
   }
 };
 
 exports.getProgramTemplate = async (req, res, next) => {
   try {
-    const programTemplate = await ProgramTemplate.findById(req.params.id)
-      .populate('crop', 'name')
-      .populate('company', 'name');
+    const programTemplate = await ProgramTemplate.findById(
+      req.params.id,
+    ).populate(
+      'crop company milestoneTemplates.productApplications.product milestoneTemplates.productApplications.unit',
+    );
 
     if (!programTemplate) {
       return res.status(404).json({
@@ -32,21 +81,6 @@ exports.getProgramTemplate = async (req, res, next) => {
     } else {
       return res.status(200).json(programTemplate);
     }
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.editProgramTemplate = async (req, res, next) => {
-  try {
-    delete req.body._id;
-
-    const programTemplate = await ProgramTemplate.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-    );
-
-    res.status(200).json(programTemplate);
   } catch (error) {
     next(error);
   }
@@ -73,9 +107,9 @@ exports.listProgramTemplates = async (req, res, next) => {
 
     const total = await ProgramTemplate.count(searchQuery);
     const programTemplates = await ProgramTemplate.find(searchQuery)
+      .sort(sort)
       .skip((page - 1) * limit)
-      .limit(limit)
-      .sort(sort);
+      .limit(limit);
 
     res.status(200).json({
       total,

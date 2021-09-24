@@ -32,7 +32,7 @@ export default function EditFarmer() {
 
   return (
     <>
-      <PageHeader title="Edit Program"></PageHeader>
+      <PageHeader title="Edit Farmer"></PageHeader>
       <FarmerForm
         onSubmit={handleSubmit}
         title="Edit Farmer"

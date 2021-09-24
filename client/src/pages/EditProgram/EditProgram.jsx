@@ -39,7 +39,7 @@ export default function EditProgram() {
           Object.keys(program).length > 0
             ? {
                 ...program,
-                crop: program.crop,
+                crop: program.crop._id,
                 farmer: program.farmer._id,
                 milestones: program.milestones
                   .sort((a, b) =>

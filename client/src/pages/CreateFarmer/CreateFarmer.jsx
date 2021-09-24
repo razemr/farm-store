@@ -1,4 +1,3 @@
-import React from 'react';
 import { FarmerForm } from '../../components/FarmerForm';
 import { PageHeader } from '../../components/PageHeader';
 import { httpClient } from '../../http/HttpClient';

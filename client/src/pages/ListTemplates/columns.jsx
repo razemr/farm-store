@@ -1,6 +1,6 @@
-import { Edit, Close, Visibility } from '@material-ui/icons';
+import { Button } from '@material-ui/core';
 
-export const createColumns = (onView, onEdit, onDelete) => [
+export const createColumns = (onView) => [
   {
     field: 'name',
     headerName: 'Name',
@@ -22,10 +22,11 @@ export const createColumns = (onView, onEdit, onDelete) => [
     flex: 2,
   },
   {
-    field: 'milestones',
+    field: 'milestoneTemplates',
+    sortable: false,
     headerName: 'Milestones',
     flex: 2,
-    renderCell: (params) => params.row.milestones.length,
+    renderCell: (params) => params.row.milestoneTemplates.length,
   },
   {
     sortable: false,
@@ -34,28 +35,7 @@ export const createColumns = (onView, onEdit, onDelete) => [
     flex: 1,
     renderCell: (params) => {
       return (
-        <div className="action-icons">
-          <Visibility
-            style={{ color: '#4caf50', cursor: 'pointer' }}
-            fontSize="small"
-            className="action-icon"
-            onClick={(e) => onView(params.row._id)}
-          />
-          <Edit
-            style={{ cursor: 'pointer' }}
-            color="primary"
-            fontSize="small"
-            className="action-icon"
-            onClick={(e) => onEdit(params.row._id)}
-          />
-          <Close
-            style={{ cursor: 'pointer' }}
-            color="error"
-            fontSize="small"
-            className="action-icon"
-            onClick={(e) => onDelete(params.row)}
-          />
-        </div>
+        <Button variant="outlined" onClick={(e) => onView(params.row._id)}>View</Button>
       );
     },
   },

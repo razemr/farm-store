@@ -172,7 +172,10 @@ exports.editProgram = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    return res.status(500).json({
+      success: false,
+      error: 'Server Error',
+    });
   }
 };
 
@@ -186,9 +189,9 @@ exports.listPrograms = async (req, res, next) => {
     const programs = await Program.find({
       $or: [{ name: new RegExp(q, 'gi') }, { farmerName: new RegExp(q, 'gi') }],
     })
+      .sort(sort)
       .skip((page - 1) * limit)
-      .limit(limit)
-      .sort(sort);
+      .limit(limit);
 
     res.status(200).json({
       total,
@@ -202,7 +205,7 @@ exports.listPrograms = async (req, res, next) => {
 exports.getProgram = async (req, res, next) => {
   try {
     const program = await Program.findById(req.params.id)
-      .populate('farmer')
+      .populate('farmer crop')
       .populate({
         path: 'milestones',
         populate: [
@@ -274,7 +277,6 @@ exports.deleteProgram = async (req, res, next) => {
 
     res.status(200).send({ program });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

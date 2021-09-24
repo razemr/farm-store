@@ -3,7 +3,7 @@ import { Edit, Close, Visibility } from '@material-ui/icons';
 import { getMilestoneStatus } from '../../utils/getMilestoneStatus';
 import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
 
-export const createColumns = (onView, onEdit, onDelete) => [
+export const createColumns = (onView) => [
   {
     field: 'name',
     headerName: 'Name',
@@ -71,28 +71,6 @@ export const createColumns = (onView, onEdit, onDelete) => [
     renderCell: (params) => {
       return (
         <Button variant="outlined" onClick={(e) => onView(params.row._id)}>View</Button>
-        // <div className="action-icons">
-        //   <Visibility
-        //     style={{ color: '#4caf50', cursor: 'pointer' }}
-        //     fontSize="small"
-        //     className="action-icon"
-        //     onClick={(e) => onView(params.row._id)}
-        //   />
-        //   <Edit
-        //     style={{ cursor: 'pointer' }}
-        //     color="primary"
-        //     fontSize="small"
-        //     className="action-icon"
-        //     onClick={(e) => onEdit(params.row._id)}
-        //   />
-        //   <Close
-        //     style={{ cursor: 'pointer' }}
-        //     color="error"
-        //     fontSize="small"
-        //     className="action-icon"
-        //     onClick={(e) => onDelete(params.row)}
-        //   />
-        // </div>
       );
     },
   },

@@ -12,12 +12,12 @@ const { parseQuery } = require('../middlewares/parseQuery.middleware');
 router
   .route('/')
   .get(parseQuery, listProgramTemplates)
-  .post(addProgramTemplate);
+  .post(addProgramTemplate, getProgramTemplate);
 
 router
   .route('/:id')
   .get(getProgramTemplate)
-  .put(editProgramTemplate)
+  .put(editProgramTemplate, getProgramTemplate)
   .delete(deleteProgramTemplate);
 
 module.exports = router;

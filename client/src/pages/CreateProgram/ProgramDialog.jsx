@@ -52,7 +52,7 @@ export default function ProgramDialog(props) {
       );
       const farmer = farmers.find((farmer) => farmer._id === values.farmer);
       const { milestones, endDate } = loadMilestonesFromTemplate(
-        template.milestones,
+        template.milestoneTemplates,
         startDate,
         acres,
       );

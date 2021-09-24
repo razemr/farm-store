@@ -2,6 +2,8 @@ const Farmer = require('../models/farmer.model');
 const Parish = require('../models/parish.model');
 const Crop = require('../models/crop.model');
 const RadaExtension = require('../models/radaExtension.model');
+const Program = require('../models/program.model');
+const Milestone = require('../models/milestone.model');
 
 exports.addFarmer = async (req, res, next) => {
   try {
@@ -51,7 +53,9 @@ exports.addFarmer = async (req, res, next) => {
 
 exports.getFarmer = async (req, res, next) => {
   try {
-    const farmer = await Farmer.findById(req.params.id).populate('parish radaExtension');
+    const farmer = await Farmer.findById(req.params.id).populate(
+      'parish radaExtension',
+    );
 
     if (!farmer) {
       return res.status(404).json({
@@ -59,7 +63,7 @@ exports.getFarmer = async (req, res, next) => {
         error: 'No farmer found',
       });
     } else {
-      return res.status(200).json({farmer});
+      return res.status(200).json({ farmer });
     }
   } catch (error) {
     next(error);
@@ -68,12 +72,42 @@ exports.getFarmer = async (req, res, next) => {
 
 exports.editFarmer = async (req, res, next) => {
   try {
-    delete req.body.programs;
-    delete req.body._id;
+    const {
+      firstName,
+      lastName,
+      sex,
+      phoneNumber,
+      emailAddress,
+      address,
+      dateOfBirth,
+    } = req.body;
 
-    const farmer = await Farmer.findByIdAndUpdate(req.params.id, req.body);
+    const parish = await Parish.findById(req.body.parish);
+    const radaExtension = await RadaExtension.findById(req.body.radaExtension);
+    const crops = await Crop.find({ _id: { $in: req.body.crops } });
 
-    res.status(200).json(farmer);
+    const farmer = await Farmer.findByIdAndUpdate(req.params.id, {
+      firstName,
+      lastName,
+      sex,
+      phoneNumber,
+      emailAddress,
+      address,
+      dateOfBirth,
+      parish: parish._id,
+      parishName: parish.name,
+      radaExtension: radaExtension._id,
+      extensionName: radaExtension.name,
+      crops: crops.map((crop) => crop._id),
+      cropNames: crops.map((crop) => crop.name),
+    });
+
+    await Program.updateMany(
+      { farmer: farmer._id },
+      { farmerName: `${firstName} ${lastName}` },
+    );
+
+    res.status(200).json({ farmer });
   } catch (error) {
     next(error);
   }
@@ -81,7 +115,11 @@ exports.editFarmer = async (req, res, next) => {
 
 exports.deleteFarmer = async (req, res, next) => {
   try {
+    const farmer = Farmer.findById(req.params.id);
+    await Program.deleteMany({ farmer: farmer._id });
+    await Milestone.deleteMany({ program: { $in: farmer.programs } });
     await Farmer.findByIdAndDelete(req.params.id);
+
     res.status(200).send();
   } catch (error) {
     next(error);
@@ -101,9 +139,9 @@ exports.listFarmers = async (req, res, next) => {
 
     const total = await Farmer.count(searchQuery);
     const farmers = await Farmer.find(searchQuery)
+      .sort(sort)
       .skip((page - 1) * limit)
-      .limit(limit)
-      .sort(sort);
+      .limit(limit);
 
     res.status(200).json({
       total,

@@ -8,6 +8,7 @@ const initialState = {
   companies: [],
   farmers: [],
   products: [],
+  productCategories: [],
   parishes: [],
   radaExtensions: [],
   units: [],
@@ -28,6 +29,8 @@ export const GlobalProvider = ({ children }) => {
       'radaExtensions',
       'units',
       'programTemplates',
+      'productCategories',
+      'companies'
     );
   }, []);
 
@@ -55,6 +58,7 @@ export const GlobalProvider = ({ children }) => {
         companies: state.companies,
         farmers: state.farmers,
         products: state.products,
+        productCategories: state.productCategories,
         parishes: state.parishes,
         radaExtensions: state.radaExtensions,
         units: state.units,

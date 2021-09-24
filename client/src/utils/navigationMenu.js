@@ -15,14 +15,19 @@ export const navigationMenu = [
     icon: <Dashboard />,
   },
   {
+    title: 'Milestones',
+    to: '/milestones',
+    icon: <Timeline />,
+  },
+  {
     title: 'Programs',
     to: '/programs',
     icon: <Assignment />,
   },
   {
-    title: 'Milestones',
-    to: '/milestones',
-    icon: <Timeline />,
+    title: 'Templates',
+    to: '/templates',
+    icon: <FileCopy color="disabled" />,
   },
   {
     title: 'Farmers',
@@ -33,10 +38,5 @@ export const navigationMenu = [
     title: 'Products',
     to: '/products',
     icon: <Storefront />,
-  },
-  {
-    title: 'Templates',
-    to: '/templates',
-    icon: <FileCopy color="disabled" />,
-  },
+  }
 ];
