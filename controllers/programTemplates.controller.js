@@ -79,7 +79,7 @@ exports.getProgramTemplate = async (req, res, next) => {
         error: 'No Program Template found',
       });
     } else {
-      return res.status(200).json(programTemplate);
+      return res.status(200).json({programTemplate});
     }
   } catch (error) {
     next(error);

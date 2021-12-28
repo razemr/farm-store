@@ -59,7 +59,7 @@ export default function DataGrid(props) {
 
   useEffect(() => {
     loadRows();
-  }, [sort, page, pageSize, searchText]);
+  }, [sort, page, pageSize, q]);
 
   const loadRows = async () => {
     let query = sort ? `_sort=${sort}&` : '';

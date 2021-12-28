@@ -192,6 +192,7 @@ export default function ViewProgram() {
           <Grid item xs={6}>
             <MilestoneTimeline
               onCheck={handleCheck}
+              align="left"
               milestones={program.milestones}
               nextMilestone={program.nextMilestone}
             />

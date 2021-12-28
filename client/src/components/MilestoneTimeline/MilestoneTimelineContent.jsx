@@ -7,12 +7,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Card from '../Card/Card';
-import { Today } from '@material-ui/icons';
 import { MILESTONE_STATUS as STATUS } from '../../utils/constants';
-import { Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { Person, Spa, LocationOn } from '@material-ui/icons';
 
 export const MilestoneTimelineContent = (props) => {
-  const { milestone, actions, onChange } = props;
+  const { milestone, actions } = props;
   return (
     <TimelineContent className="content-wrapper">
       <Card
@@ -40,20 +40,20 @@ export const MilestoneTimelineContent = (props) => {
           </div>
         }
       >
-        <Table>
+        <Table padding="normal">
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="h5">Product</Typography>
+                <Typography variant="h6">Product</Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="h5">Category</Typography>
+                <Typography variant="h6">Category</Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="h5">Quantity</Typography>
+                <Typography variant="h6">Quantity</Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="h5">Unit</Typography>
+                <Typography variant="h6">Unit</Typography>
               </TableCell>
             </TableRow>
           </TableHead>

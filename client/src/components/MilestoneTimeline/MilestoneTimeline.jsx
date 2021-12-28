@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 });
 
 export default function MilestoneTimeline(props) {
-  const { milestones, nextMilestone, onCheck, align } = props;
+  const { milestones, nextMilestone, onCheck, align, actions, ...other} = props;
   const statusMilestones = useMilestoneStatus(
     milestones,
     nextMilestone,
@@ -47,11 +47,11 @@ export default function MilestoneTimeline(props) {
   };
 
   return (
-    <Timeline align={align}>
+    <Timeline align={align} {...other}>
       {statusMilestones &&
         statusMilestones.map((milestone, index) => (
           <TimelineItem
-            classes={{ missingOppositeContent: align !== 'center' ? classes.missingOppositeContent : '' }}
+            classes={{ missingOppositeContent: align !== 'alternate' ? classes.missingOppositeContent : '' }}
             key={milestone._id}
           >
             <MiliestonTimelineSeparator status={milestone.status} />

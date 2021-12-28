@@ -30,7 +30,7 @@ export default function ViewTemplate() {
   };
 
   const handleDeleteConfirmation = async () => {
-    await httpClient.delete(`/programTemplates/${template._id}`);
+    await httpClient.delete(`/programTemplates/${id}`);
     setOpen(false);
     history.push('/templates');
   };

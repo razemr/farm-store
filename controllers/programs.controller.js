@@ -58,6 +58,14 @@ exports.addProgram = async (req, res, next) => {
       .map((milestone) => ({
         ...milestone,
         program: program._id,
+        crop,
+        cropName: _crop.name,
+        farmer: farmer,
+        farmerName: `${firstName} ${lastName}`,
+        parish,
+        parishName: _parish.name,
+        radaExtension,
+        radaExtensionName: _radaExtension.name,
       }));
     const nextMilestone = milestones[0].date;
     milestones = await Milestone.create(milestones);
@@ -148,10 +156,33 @@ exports.editProgram = async (req, res, next) => {
       let { _id, date, productApplications } = milestones[i];
       if (_id) {
         await Milestone.findByIdAndUpdate(_id, {
-          $set: { date, productApplications },
+          $set: {
+            date,
+            productApplications,
+            crop,
+            cropName: _crop.name,
+            farmer: farmer,
+            farmerName: `${firstName} ${lastName}`,
+            parish,
+            parishName: _parish.name,
+            radaExtension,
+            radaExtensionName: _radaExtension.name,
+          },
         });
       } else {
-        const milestone = await Milestone.create({ date, productApplications });
+        const milestone = await Milestone.create({
+          program: program._id,
+          date,
+          productApplications,
+          crop,
+          cropName: _crop.name,
+          farmer: farmer,
+          farmerName: `${firstName} ${lastName}`,
+          parish,
+          parishName: _parish.name,
+          radaExtension,
+          radaExtensionName: _radaExtension.name,
+        });
         await Program.findByIdAndUpdate(req.params.id, {
           $push: { milestones: milestone._id },
         });
@@ -182,7 +213,6 @@ exports.editProgram = async (req, res, next) => {
 exports.listPrograms = async (req, res, next) => {
   try {
     const { q, page, limit, sort } = req.body.queryParams;
-
     const total = await Program.count({
       $or: [{ name: new RegExp(q, 'gi') }, { farmerName: new RegExp(q, 'gi') }],
     });

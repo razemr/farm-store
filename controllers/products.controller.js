@@ -2,6 +2,7 @@ const Product = require('../models/product.model');
 const Milestone = require('../models/milestone.model');
 const ProductCategory = require('../models/productCategory.model');
 const Company = require('../models/company.model');
+const ProgramTemplate = require('../models/programTemplate.model');
 
 exports.addProduct = async (req, res, next) => {
   try {
@@ -79,7 +80,16 @@ exports.deleteProduct = async (req, res, next) => {
       { $pull: { productApplications: { product: req.params.id } } },
     );
 
-    await Product.remove({ _id: req.params._id });
+    await ProgramTemplate.updateMany(
+      { 'milestoneTemplates.productApplications.product': req.params.id },
+      {
+        $pull: {
+          'milestoneTemplates.productApplications': { product: req.params.id },
+        },
+      },
+    );
+
+    await Product.remove({ _id: req.params.id });
 
     res.status(200).send();
   } catch (error) {
